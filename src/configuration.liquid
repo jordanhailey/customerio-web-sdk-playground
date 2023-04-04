@@ -1,0 +1,50 @@
+<form id="set_cio_config">
+  <label for="site_id">Set your Site ID</label>
+  <input
+    type="text"
+    name="site_id"
+    id="site_id">
+  <label for="region">Select your account Region</label>
+  <input
+    type="radio"
+    id="region"
+    name="region"
+    value="us"
+    checked>
+  <label for="us">US</label><br>
+  <input
+    type="radio"
+    id="eu"
+    name="region"
+    value="eu">
+  <label for="eu">EU</label><br>
+  <input type="submit" value="Update CIO Config">
+</form>
+<noscript>
+  <h2 class="">Warning — JavaScript disabled</h2>
+  <p>This Form submission will not update the CIO tracking config, in fact, while JavaScript is disabled, you're not being tracked by the JS Snippet.</p>
+</noscript>
+<script>
+  var form = document.getElementById("set_cio_config");
+  var siteIDInput = document.getElementById("site_id");
+  var regionInput = document.getElementById("region");
+
+  window.addEventListener("load", function setCurrentValues(loadEvent) {
+    let {siteID: currentSiteID, region: currentRegion} = window.getCioConfig();
+    siteIDInput.value = currentSiteID;
+    regionInput.value = currentRegion;
+  })
+
+  form.addEventListener("submit", function handleSubmit(submitEvent) {
+    submitEvent.preventDefault()
+    const data = new FormData(form);
+    let cioConfig = {
+      site_id: undefined,
+      region: undefined
+    };
+    for (const [name, value] of data) {
+      cioConfig = Object.assign({}, cioConfig, {[`${name}`]: value})
+    }
+    window.updateCioConfig({siteID: cioConfig.site_id, region: cioConfig.region});
+  })
+</script>
