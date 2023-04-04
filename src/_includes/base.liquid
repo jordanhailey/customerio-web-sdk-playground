@@ -9,7 +9,17 @@
     <script type="text/javascript" src="/js/main.js"></script>
   </head>
   <body>
-    <header></header>
+    <header>
+      <nav>
+        <ul>
+          {% for item in collections.pages %}
+            <li>
+              <a href="{{item.permalink}}">{{ item.link_title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+    </header>
     <main>
       <h1>{{ title }}</h1>
       {{ content }}
