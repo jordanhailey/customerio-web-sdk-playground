@@ -4,8 +4,9 @@
   "description": "A place to test the CIO JS Web SDK",
   "main": ".eleventy.js",
   "scripts": {
-    "start": "rm -rf _site && npx @11ty/eleventy --serve --quiet & npx tailwindcss -i ./src/tailwind.css -o ./_site/css/style.css --watch",
-    "build": "rm -rf _site && ELEVENTY_ENV=production npx @11ty/eleventy && npx tailwindcss -i ./src/tailwind.css -o ./_site/css/style.css --minify"
+    "clean": "rm -rf _site",
+    "start": "npx @11ty/eleventy --serve --watch --quiet & npx tailwindcss -i ./src/tailwind.css -o ./_site/css/style.css --watch",
+    "build": "npm run clean && ELEVENTY_ENV=production npx @11ty/eleventy && npx tailwindcss -i ./src/tailwind.css -o ./_site/css/style.css --minify"
   },
   "keywords": [],
   "author": "jordanhailey",

@@ -9,22 +9,30 @@
     <script type="text/javascript" src="/js/main.js"></script>
   </head>
   <body>
-    <header>
-      <nav>
-        <ul>
-          {% for item in collections.pages %}
-            <li>
-              <a href="{{item.permalink}}">{{ item.link_title }}</a>
-            </li>
-          {% endfor %}
-        </ul>
-      </nav>
-    </header>
-    <main>
-      <h1>{{ title }}</h1>
-      {{ content }}
-    </main>
-    <footer></footer>
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <header>
+        <nav>
+          <div id="nav-label" class="sr-only">Pages on this web app</div>
+          <ul aria-labelledby="nav-label" class="flex">
+            {% for item in collections.pages %}
+              {% assign isCurrentPage = item.permalink == page.url %}
+              {% assign first = forloop.index0 == 0 %}
+              <li class="flex-1 {% if first == true %}ml-0 mr-2{% else %}mx-2{% endif %}">
+                <a
+                  href="{{item.permalink}}"
+                  {% if isCurrentPage == true %}aria-current="page"{% endif %}
+                  class="block px-2 py-1 bg-slate-400 hover:bg-slate-600 hover:text-indigo-200 hover:font-bold w-full pointer rounded-md border-gray-300 hover:border-indigo-500 focus:border-indigo-500 hover:ring-indigo-500 focus:ring-indigo-500">{{ item.link_title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </nav>
+      </header>
+      <main class="">
+        <h1 class="font-semibold text-4xl">{{ title }}</h1>
+        {{ content }}
+      </main>
+      <footer></footer>
+    </div>
     {% include 'partials/cio-snippet.html' %}
   </body>
 </html>

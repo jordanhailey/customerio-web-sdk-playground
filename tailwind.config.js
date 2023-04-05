@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{html,liquid}'],
-  prefix: 'u-',
+  // prefix: 'tw-',
   theme: {
     extend: {},
   },
