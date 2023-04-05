@@ -15,7 +15,7 @@ function setFormValues() {
     regionOptions.eu.removeAttribute("selected");
     regionOptions.us.setAttribute("selected", true);
     regionSelect.value = "regionUS";
-  } else {
+  } else if (`${currentRegion}`.toLowerCase() == "regioneu") {
     regionOptions.us.removeAttribute("selected");
     regionOptions.eu.setAttribute("selected", true);
     regionSelect.value = "regionEU";
