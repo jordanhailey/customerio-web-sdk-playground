@@ -14,7 +14,13 @@
         {% include 'partials/nav' %}
       </header>
       <main class="">
-        <h1 class="py-5 font-semibold text-4xl sm:text-5xl">{{ title }}</h1>
+        <h1 class="py-5 px-4 sm:px-6 font-semibold text-4xl sm:text-5xl">{{ title }}</h1>
+        <noscript>
+          <section class="bg-yellow-400 rounded-md px-4 sm:px-6">
+            <h2 class="py-4 font-semibold text-3xl sm:text-4xl">Warning — JavaScript disabled</h2>
+            <p class="py-2">While JavaScript is disabled, you're not being tracked by the JavaScript Web SDK.</p>
+          </section>
+        </noscript>
         {{ content }}
       </main>
       <footer></footer>
