@@ -1,6 +1,6 @@
-<div class="py-5 px-4 sm:px-6 my-8 divide-y divide-gray-300 overflow-hidden rounded-lg bg-gray-100 shadow">
+<section id="configuration-form" class="py-5 px-4 sm:px-6 my-8 divide-y divide-gray-300 overflow-hidden rounded-lg bg-gray-100 shadow">
   <div class="py-5">
-    <h2 class="text-base font-semibold leading-7 text-gray-900">Your Current Customer.io JS Snippet Configuration</h2>
+    <h2 class="text-3xl sm:text-4xl font-semibold leading-7 text-gray-900">Your Current Customer.io JS Snippet Configuration</h2>
     <p class="mt-1 text-sm leading-6 text-gray-600">This data will be used to link your activity on this site to your Customer.io workspace.</p>
   </div>
   <div class="py-5">
@@ -46,14 +46,15 @@
       </div>
     </form>
   </div>
-</div>
+</section>
 
-<section class="bg-gray-200 sm:w-[calc(100%+4rem)] sm:-mx-[2rem] sm:px-[2rem] px-4">
-  <noscript>
+<noscript>
+  <section class="bg-gray-200 sm:w-[calc(100%+4rem)] sm:-mx-[2rem] sm:px-[2rem] px-4">
     <h2 class="">Warning — JavaScript disabled</h2>
     <p>This Form submission will not update the CIO tracking config, in fact, while JavaScript is disabled, you're not being tracked by the JS Snippet.</p>
-  </noscript>
-</section>
+  </section>
+</noscript>
+
 <script>
   var form = document.getElementById("set_cio_config");
   var siteIDInput = document.getElementById("siteID");
