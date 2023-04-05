@@ -1,7 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-[aria-current="page"] {
-  @apply text-indigo-800 font-bold;
-}
