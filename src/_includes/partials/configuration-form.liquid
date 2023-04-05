@@ -27,7 +27,6 @@
                 <select
                   id="region"
                   name="region"
-                  autocomplete="region-name"
                   class="block w-full rounded-md border-0 py-1.5 px-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-teal-600 sm:max-w-xs sm:text-sm sm:leading-6">
                   <option id="regionUS" value="regionUS">US</option>
                   <option id="regionEU" value="regionEU">EU</option>
@@ -47,49 +46,4 @@
     </form>
   </div>
 </section>
-<script>
-  var form = document.getElementById("set_cio_config");
-  var siteIDInput = document.getElementById("siteID");
-  var cancelBtn = document.getElementById("cancel");
-  var regionSelect = document.getElementById("region");
-  var regionOptions = {
-    "us": document.getElementById("regionUS"),
-    "eu": document.getElementById("regionEU")
-  };
-
-  function setFormValues() {
-    let {siteID: currentSiteID, region: currentRegion} = window.getCioConfig();
-    siteIDInput.value = currentSiteID;
-    if (`${currentRegion}`.toLowerCase() == "us") {
-      regionOptions.eu.removeAttribute("selected");
-      regionOptions.us.setAttribute("selected", true);
-      regionSelect.value = "regionUS"
-    } else {
-      regionOptions.us.removeAttribute("selected");
-      regionOptions.eu.setAttribute("selected", true);
-      regionSelect.value = "regionEU"
-    }
-    console.log("form fields set")
-  }
-  cancelBtn.addEventListener("click", function resetForm(cancelEvent) {
-    setFormValues()
-  })
-
-  window.addEventListener("load", function setCurrentValues(loadEvent) {
-    setFormValues()
-  })
-
-  form.addEventListener("submit", function handleSubmit(submitEvent) {
-    submitEvent.preventDefault()
-    const data = new FormData(form);
-    let cioConfig = {
-      site_id: undefined,
-      region: undefined
-    };
-    for (const [name, value] of data) {
-      cioConfig = Object.assign({}, cioConfig, {[`${name}`]: value})
-    }
-    console.log({cioConfig})
-    window.updateCioConfig(cioConfig);
-  })
-</script>
+<script type="module" src="/js/helpers/components/configuration-form-helpers.js"></script>
