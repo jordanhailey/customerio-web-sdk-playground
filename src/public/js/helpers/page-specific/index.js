@@ -1,6 +1,8 @@
+import { getIdentifier, getAnonymousID } from "../cio-helpers.js";
+
 window.addEventListener("load", () => {
-  let identifier = window.functions.getIdentifier();
-  let anonymousIdentifier = window.functions.getAnonymousID();
+  let identifier = getIdentifier();
+  let anonymousIdentifier = getAnonymousID();
   document.getElementById(
     "show-url"
   ).innerHTML = `<em class="text-purple-500">${window.location.href}</em>`;

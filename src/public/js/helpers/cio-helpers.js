@@ -64,11 +64,3 @@ export function getAnonymousID() {
 export function getIdentifier() {
   return getCookie(window._cio.cookieNamespace + "id");
 }
-
-window.TSE_CIO_CONFIG = TSE_CIO_CONFIG;
-window.functions = Object.assign({}, window.functions, {
-  getAnonymousID,
-  getIdentifier,
-  getCioConfig,
-  updateCioConfig,
-});
