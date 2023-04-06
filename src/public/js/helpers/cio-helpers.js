@@ -1,9 +1,9 @@
 const CIO_LOCALSTORAGE_NAMESPACE = "TSE_CIO_SDK_CONFIG";
 
 const CIO_DEFAULTS = {
-  siteID: "YOUR_SITE_ID", 
-  region: "us"
-}
+  siteID: "YOUR_SITE_ID",
+  region: "us",
+};
 
 export function getCioConfig() {
   let siteID,
@@ -64,11 +64,56 @@ export function getAnonymousID() {
 export function getIdentifier() {
   try {
     if (!window._cio) {
-      throw "_cio has not yet been added to the window"
+      throw "_cio has not yet been added to the window";
     }
-    return window._cio._findCustomer()
+    return window._cio._findCustomer();
   } catch (err) {
     console.error(err);
-    return ""
+    return "";
   }
+}
+
+export async function retrieveIdentifier() {
+  let intervalAttempt = 0;
+  return new Promise((resolve,reject)=>{
+    if (window.TSE_CURRENT_IDENTIFIER) {
+      resolve(window.TSE_CURRENT_IDENTIFIER);
+    }
+    let cioLoadedInterval = setInterval(() => {
+      intervalAttempt++;
+      let identifier = getIdentifier();
+      let anonymousIdentifier = getAnonymousID();
+      if (identifier) {
+        clearInterval(cioLoadedInterval);
+        window.TSE_CURRENT_IDENTIFIER = {identifier}
+        resolve({identifier});
+      } else if (anonymousIdentifier) {
+        clearInterval(cioLoadedInterval);
+        window.TSE_CURRENT_IDENTIFIER = {anonymousIdentifier}
+        resolve({anonymousIdentifier});
+      }
+      // If not found, continue attempting every ~10ms for about 1 second
+      if (intervalAttempt > 100) {
+        console.warn("no identifier found");
+        clearInterval(cioLoadedInterval);
+      }
+    }, 10);
+  })
+}
+
+export function showIdentifierElements () {
+  Array.from(document.getElementsByClassName("current-identifier"))
+    .forEach(async (element) => {
+      let currentIdentifier = await retrieveIdentifier().then(id=>id);
+      element.innerHTML = (
+        `<div class="p-2">Your current ${currentIdentifier.identifier ? 
+          "<span class=\"font-bold text-purple-500\">identifier</span>" : 
+          "<span class=\"font-bold text-purple-500\">anonymous identifier</span>"} 
+          is: <em class="font-bold text-purple-500">${
+            currentIdentifier.identifier ? 
+            currentIdentifier.identifier : 
+            currentIdentifier.anonymousIdentifier
+          }</em></div>`
+        );
+    });
 }
