@@ -1,7 +1,92 @@
 ---
   permalink: /identify/
   meta_title: identify
-  title: identify
+  title: Identifying Profiles
   link_title: Identify
   navIndex: 3
 ---
+
+<h2 class="text-3xl sm:text-4xl">
+  YOLO DEMO BRANCH
+</h2>
+<blockquote class="current-identifier bg-slate-100 rounded-md shadow mt-1 w-fit"></blockquote>
+<section id="identify" class="py-5 px-4 sm:px-6 my-8 divide-y divide-gray-300 overflow-hidden rounded-lg bg-gray-100 shadow">
+  <div class="py-5">
+    <h2 class="pb-5 text-3xl sm:text-4xl font-semibold leading-7 text-gray-900">Identify a Profile</h2>
+    <p class="mt-1 text-sm leading-6 text-gray-600">This data will be used to send an identify call to your Customer.io workspace.</p>
+  </div>
+  <div class="py-5">
+    <form id="identify-form">
+      <div class="space-y-12 my-4">
+        <div class="border-b border-gray-900/10 pb-12">
+          <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div class="sm:col-span-4">
+              <label for="id" class="block text-sm font-medium leading-6 text-gray-900">Identifier (either an id or an email address)</label>
+              <div class="mt-2">
+                <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-teal-600 sm:max-w-md">
+                  <input
+                    type="text"
+                    name="id"
+                    id="id"
+                    class="block flex-1 border-0 rounded-md py-1.5 px-1.5 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    placeholder="identifier">
+                </div>
+              </div>
+            </div>
+            <div class="sm:col-span-4">
+              <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
+              <div class="mt-2">
+                <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-teal-600 sm:max-w-md">
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    class="block flex-1 border-0 rounded-md py-1.5 px-1.5 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    placeholder="email@example.com">
+                </div>
+              </div>
+            </div>
+            <div class="sm:col-span-4">
+              <label for="customVariableName" class="block text-sm font-medium leading-6 text-gray-900">Custom Variable Name</label>
+              <div class="mt-2">
+                <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-teal-600 sm:max-w-md">
+                  <input
+                    type="text"
+                    name="customVariableName"
+                    id="customVariableName"
+                    class="block flex-1 border-0 rounded-md py-1.5 px-1.5 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    placeholder="custom variable name">
+                </div>
+              </div>
+            </div>
+            <div class="sm:col-span-4">
+              <label for="customVariableValue" class="block text-sm font-medium leading-6 text-gray-900">Custom Variable Value</label>
+              <div class="mt-2">
+                <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-teal-600 sm:max-w-md">
+                  <input
+                    type="text"
+                    name="customVariableValue"
+                    id="customVariableValue"
+                    class="block flex-1 border-0 rounded-md py-1.5 px-1.5 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    placeholder="custom variable value">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-6 flex items-center justify-start gap-x-6">
+        <button
+          type="button"
+          id="cancel"
+          class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
+        <button type="submit" class="rounded-md bg-purple-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600">Send Identify Call</button>
+      </div>
+    </form>
+  </div>
+</section>
+<section id="output" class="pb-10">
+  <pre id="identify-call-warning" class="bg-yellow-400 rounded-md px-4 sm:px-6"></pre>
+  <pre id="identify-call-error" class="bg-red-400 rounded-md px-4 sm:px-6"></pre>
+  <pre id="identify-call-output"></pre>
+</section>
