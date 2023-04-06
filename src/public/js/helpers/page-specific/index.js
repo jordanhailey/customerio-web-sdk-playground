@@ -18,5 +18,5 @@ window.addEventListener("load", () => {
     } else {
       console.warn("Couldn't find identifier", {identifier,anonymousIdentifier})
     }
-  },1500)
+  },500)
 });
