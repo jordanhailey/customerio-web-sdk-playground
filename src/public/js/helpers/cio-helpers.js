@@ -104,16 +104,29 @@ export async function retrieveIdentifier() {
 export function showIdentifierElements () {
   Array.from(document.getElementsByClassName("current-identifier"))
     .forEach(async (element) => {
-      let currentIdentifier = await retrieveIdentifier().then(id=>id);
-      element.innerHTML = (
-        `<div class="p-2">Your current ${currentIdentifier.identifier ? 
-          "<span class=\"font-bold text-purple-500\">identifier</span>" : 
-          "<span class=\"font-bold text-purple-500\">anonymous identifier</span>"} 
-          is: <em class="font-bold text-purple-500">${
-            currentIdentifier.identifier ? 
-            currentIdentifier.identifier : 
-            currentIdentifier.anonymousIdentifier
-          }</em></div>`
-        );
+      let currentIdentifier = await retrieveIdentifier().then(id=>{
+        element.innerHTML = (
+          `<div class="p-2">Your current ${id.identifier ? 
+            "<span class=\"font-bold text-purple-500\">identifier</span>" : 
+            "<span class=\"font-bold text-purple-500\">anonymous identifier</span>"} 
+            is: <em class="font-bold text-purple-500">${
+              id.identifier ? 
+              id.identifier : 
+              id.anonymousIdentifier
+            }</em></div>`
+          );
+      });
+    });
+}
+export function addClickListenerToResetIdentifierElements () {
+  Array.from(document.getElementsByClassName("reset-identifier"))
+    .forEach(async (element) => {
+      let currentIdentifier = await retrieveIdentifier().then(id=>{
+        element.classList.remove("hidden");
+        element.addEventListener("click", (clickEvent)=>{
+          window._cio.reset();
+          window.location.reload();
+        })
+      });
     });
 }

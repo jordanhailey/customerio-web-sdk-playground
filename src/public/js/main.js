@@ -20,6 +20,9 @@ const LOCATION = window.location;
     case "/identify/":
       import("./helpers/page-specific/identify.js").then(js=>(js)).catch(err=>(console.error(err)))
       break;
+    case "/in-app/":
+      import("./helpers/page-specific/in-app.js").then(js=>(js)).catch(err=>(console.error(err)))
+      break;
     default:
       console.log(LOCATION.pathname)
       break;

@@ -11,7 +11,7 @@
     <a href="/configuration/" class="text-teal-600 hover:text-teal-900 font-bold">the configuration page</a>
     and have JavaScript enabled in your browser—and aren't using a content 
     blocker to prevent loading any of the scripts on this page—You're being tracked.</p>
-  <blockquote class="my-5 current-identifier bg-slate-100 rounded-md shadow w-fit"></blockquote>
+  {% include 'partials/show-identifier' %}
   <p class="my-4 max-w-4xl">Don't be alarmed... Unless you have scrolled down and clicked on any of the "Send Event" 
     buttons below, chances are that all we're tracking at this point are your page views across this domain. There are two event types that can be tracked with the JavaScript SDK, both of which can be sent to Customer.io at any time after the JavaScript snippet's initialization. The two event types are:
     <a href="#track-events">

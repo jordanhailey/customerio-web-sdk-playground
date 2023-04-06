@@ -1,5 +1,5 @@
 import { getCurrentEpochTimestampInSeconds } from "../index.js";
-import { showIdentifierElements } from "../cio-helpers.js";
+import { showIdentifierElements,addClickListenerToResetIdentifierElements } from "../cio-helpers.js";
 
 const eventPayloads = {
   "event-1": {
@@ -48,4 +48,5 @@ const sendTest1 = getElementById("send-event-1");
 clickListenerToCIO(sendTest1)("event-1");
 
 // Show Current Identifier
-showIdentifierElements()
+showIdentifierElements();
+addClickListenerToResetIdentifierElements();

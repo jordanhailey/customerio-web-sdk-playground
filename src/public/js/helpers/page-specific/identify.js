@@ -1,7 +1,8 @@
 import { getCurrentEpochTimestampInSeconds } from "../index.js";
-import { showIdentifierElements } from "../cio-helpers.js";
+import { showIdentifierElements, addClickListenerToResetIdentifierElements } from "../cio-helpers.js";
 
 showIdentifierElements();
+addClickListenerToResetIdentifierElements();
 
 const CIO_NO_ID_WARNING = "_cio: id can't be empty. This identify call will not be tracked."
 const CIO_CALL_UNDEFINED_ERROR = "TypeError: Cannot read properties of undefined (reading 'id')"
@@ -12,8 +13,10 @@ const warningElement = document.getElementById("identify-call-warning");
 const errorElement = document.getElementById("identify-call-error");
 const output = document.getElementById("identify-call-output");
 
+
 form.addEventListener("submit", function handleSubmit(submitEvent) {
   submitEvent.preventDefault();
+  console.log({submitEvent});
   errorElement.innerText = "";
   warningElement.innerText = "";
   output.innerText = "";
@@ -51,5 +54,10 @@ form.addEventListener("submit", function handleSubmit(submitEvent) {
     console.log("no identify call sent");
   } else {
     window._cio.identify(identifyCall);
+    if (identifyCall.id) {
+      setTimeout(() => {
+        submitEvent.target.submit();
+      }, 3000);
+    }
   }
 });

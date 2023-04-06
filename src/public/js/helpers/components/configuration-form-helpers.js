@@ -40,4 +40,5 @@ form.addEventListener("submit", function handleSubmit(submitEvent) {
     cioConfig = Object.assign({}, cioConfig, { [`${name}`]: value });
   }
   updateCioConfig(cioConfig);
+  window.location.reload();
 });
