@@ -5,19 +5,59 @@
   link_title: Events
   navIndex: 2
 ---
-<section class="py-5 px-4 sm:px-6">
-  <h2 class="pb-5 text-3xl sm:text-4xl font-semibold leading-7 text-gray-900">Anonymous Events</h2>
-  <p class="max-w-4xl">If you have already added your site ID on
+<section id="anonymous-events" class="my-5 py-4 px-4 sm:px-6">
+  <h2 class="pb-5 text-3xl sm:text-4xl font-semibold leading-7 text-gray-900">"Anonymous" Events</h2>
+  <p class="mb-4 max-w-4xl">If you have already added your site ID on
     <a href="/configuration/" class="text-teal-600 hover:text-teal-900 font-bold">the configuration page</a>
     and have JavaScript enabled in your browser—and aren't using a content 
     blocker to prevent loading any of the scripts on this page—You're being tracked.</p>
+  <blockquote class="my-5 current-identifier bg-slate-100 rounded-md shadow w-fit"></blockquote>
   <p class="my-4 max-w-4xl">Don't be alarmed... Unless you have scrolled down and clicked on any of the "Send Event" 
-    buttons below, chances are that all we're tracking at this point is an "anonymous_id" and your page views across this domain. 
-                                                                            You can read more about this by checking out our documentation on
-    <a href="https://customer.io/docs/anonymous-events/" class="text-teal-600 hover:text-teal-900 font-bold">Anonymous Events</a>
+    buttons below, chances are that all we're tracking at this point are your page views across this domain. There are two event types that can be tracked with the JavaScript SDK, both of which can be sent to Customer.io at any time after the JavaScript snippet's initialization. The two event types are:
+    <a href="#track-events">
+      <code class="text-red-500 font-mono text-sm">track</code>
+    </a>
+    and
+    <a href="#page-events">
+      <code class="text-red-500 font-mono text-sm">page</code>
+    </a>
+    events.
   </p>
   <p class="my-4 max-w-4xl">
-    Ready to track some events? Go ahead and click the button below, and we'll send an event named "<code class="text-red-500 font-mono text-sm">cio_web_sdk_test_event_1</code>" with the following metadata:
+    If you have
+    <a class="text-teal-600 hover:text-teal-900 font-bold" href="https://customer.io/docs/anonymous-events/#turn-on-merging">enabled anonymous event merging</a>
+    in your workspace, then anonymous events are only "anonymous" until you associate the tracked
+    <code class="text-red-500 font-mono text-sm">anonymous_id</code>
+    with an identified profile in Customer.io.
+  </p>
+</section>
+<section id="track-events" class="my-5 py-4 px-4 sm:px-6">
+  <h2 class="pb-5 text-3xl sm:text-4xl font-semibold leading-7 text-gray-900">
+    <code class="text-red-500 font-mono text-2xl sm:text-3xl">track</code>
+    Events</h2>
+  <p class="my-4 max-w-4xl">
+    To make a long story short,
+    <code class="text-red-500 font-mono text-sm">track</code>
+    events are typically all you will be responsible for sending. They are initiated in the following manner:
+  </p>
+  <pre class="my-4 max-w-4xl text-sm">
+    window._cio.track(<code class="text-red-500 font-mono">YOUR_EVENT_NAME</code>, {<code class="text-red-500 font-mono">...YOUR_EVENT_PROPERTIES</code>})
+  </pre>
+  <p class="my-4 max-w-4xl">
+    In the code snippet above
+    <code class="text-red-500 font-mono text-sm">YOUR_EVENT_NAME</code>
+    should be a
+    <a href="https://customer.io/docs/getting-started-with-json/#simple" class="text-teal-600 hover:text-teal-900 font-bold">String value</a>. And
+    <code class="text-red-500 font-mono text-sm">YOUR_EVENT_PROPERTIES</code>
+    should be a valid JavaScript or
+    <a href="https://customer.io/docs/getting-started-with-json/#objects" class="text-teal-600 hover:text-teal-900 font-bold">JSON Object</a>. The
+    <code class="text-red-500 font-mono text-sm">...</code>
+    is a little built-in JavaScript feature known as a "<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax" class="text-teal-600 hover:text-teal-900 font-bold">spread operator</a>", in this case we're exemplifying that you can use it to copy the key-value pairs of your
+    <code class="text-red-500 font-mono text-sm">YOUR_EVENT_PROPERTIES</code>
+    Object into a new Object.
+  </p>
+  <p class="my-4 max-w-4xl">
+    Ready to send a track event? Go ahead and click the button below, and we'll send an event named "<code class="text-red-500 font-mono text-sm">cio_web_sdk_test_event_1</code>" with the following metadata:
   </p>
   <pre class="my-4 max-w-4xl text-sm">
     {
@@ -33,5 +73,10 @@
     Send Event
     {% include 'partials/svg/paper-plane-icon.svg' %}
   </button>
-  <blockquote class="my-5 current-identifier bg-slate-100 rounded-md shadow w-fit"></blockquote>
+</section>
+<section id="page-events" class="py-5 px-4 sm:px-6">
+  <h2 class="pb-5 text-3xl sm:text-4xl font-semibold leading-7 text-gray-900">
+    <code class="text-red-500 font-mono text-2xl sm:text-3xl">page</code>
+    Events</h2>
+  <p class="mb-4 max-w-4xl"></p>
 </section>
