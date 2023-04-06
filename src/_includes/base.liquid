@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="/favicon.ico">
     <title>{{ meta_title | default: "CIO JS SDK" }}</title>
     <link rel="stylesheet" href="/css/style.css">
-    <script type="text/javascript" src="/js/main.js"></script>
+    <script type="module" src="/js/main.js"></script>
   </head>
   <body>
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -25,6 +29,5 @@
       </main>
       <footer></footer>
     </div>
-    {% include 'partials/cio-snippet' %}
   </body>
 </html>
