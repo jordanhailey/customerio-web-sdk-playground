@@ -57,7 +57,7 @@ form.addEventListener("submit", function handleSubmit(submitEvent) {
     if (identifyCall.id) {
       setTimeout(() => {
         submitEvent.target.submit();
-      }, 3000);
+      }, 5000);
     }
   }
 });
