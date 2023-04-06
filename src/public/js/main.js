@@ -14,6 +14,9 @@ const LOCATION = window.location;
     case "/configuration/":
       import("./helpers/page-specific/configuration.js").then(js=>(js)).catch(err=>(console.error(err)))
       break;
+    case "/events/":
+      import("./helpers/page-specific/events.js").then(js=>(js)).catch(err=>(console.error(err)))
+      break;
     default:
       console.log(LOCATION.pathname)
       break;
