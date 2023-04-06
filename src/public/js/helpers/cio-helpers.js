@@ -62,5 +62,13 @@ export function getAnonymousID() {
 }
 
 export function getIdentifier() {
-  return getCookie(window._cio.cookieNamespace + "id");
+  try {
+    if (!window._cio) {
+      throw "_cio has not yet been added to the window"
+    }
+    return window._cio._findCustomer()
+  } catch (err) {
+    console.error(err);
+    return ""
+  }
 }
