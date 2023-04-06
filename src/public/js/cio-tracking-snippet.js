@@ -14,11 +14,11 @@ t.setAttribute('data-use-array-params', 'true');
 t.setAttribute('data-auto-track-page', 'true');
 t.setAttribute('data-use-in-app', 'true');
 /* altered for dynamic region selection */
-if (`${TSE_CIO_CONFIG.region}`.toLowerCase() == "us") {
-t.src = 'https://assets.customer.io/assets/track.js';
+if (/eu/.test(`${TSE_CIO_CONFIG.region}`.toLowerCase()) == false) {
+  t.src = 'https://assets.customer.io/assets/track.js';
 } else {
-//account is in the EU, use:
-t.src = 'https://assets.customer.io/assets/track-eu.js'
+  //account is in the EU, use:
+  t.src = 'https://assets.customer.io/assets/track-eu.js'
 }
 
 s.parentNode.insertBefore(t, s);
