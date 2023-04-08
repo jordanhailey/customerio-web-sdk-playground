@@ -3,17 +3,20 @@ const CIO_LOCALSTORAGE_NAMESPACE = "TSE_CIO_SDK_CONFIG";
 const CIO_DEFAULTS = {
   siteID: "YOUR_SITE_ID",
   region: "us",
+  cdpToken: "YOUR_CIO_CDP_TOKEN"
 };
 
 export function getCioConfig() {
   let siteID,
     region,
+    cdpToken,
     storedState = JSON.parse(
       window.localStorage.getItem(CIO_LOCALSTORAGE_NAMESPACE)
     );
   if (storedState) {
     siteID = storedState.siteID;
     region = storedState.region;
+    cdpToken = storedState.cdpToken;
   }
   let cioConfig;
   if (siteID && region) {
@@ -21,24 +24,27 @@ export function getCioConfig() {
   } else {
     cioConfig = CIO_DEFAULTS;
   }
+  if ( cdpToken ) {
+    cioConfig.cdpToken = cdpToken
+  }
   return cioConfig;
 }
 
-function setCioConfig({ siteID, region }) {
+function setCioConfig({ siteID, region , cdpToken }) {
   window.localStorage.setItem(
     CIO_LOCALSTORAGE_NAMESPACE,
-    JSON.stringify({ siteID, region })
+    JSON.stringify({ siteID, region , cdpToken })
   );
 }
 
-export function updateCioConfig({ siteID, region }) {
-  let { siteID: previousSiteId, region: previousRegion } = getCioConfig();
-  if (!previousSiteId && previousRegion) {
+export function updateCioConfig({ siteID, region, cdpToken }) {
+  let { siteID: previousSiteId, region: previousRegion, cdpToken: previousCDPToken } = getCioConfig();
+  if (!previousSiteId && !previousRegion) {
     setCioConfig({ siteID, region });
-  } else if (siteID != previousSiteId || region != previousRegion) {
-    setCioConfig({ siteID, region });
+  } else if (siteID != previousSiteId || region != previousRegion || cdpToken != previousCDPToken) {
+    setCioConfig({ siteID, region, cdpToken });
   } else console.log("Same values provided, No changes made to CIO config");
-  console.log({ siteID, region });
+  console.log({ siteID, region, cdpToken});
 }
 
 export const TSE_CIO_CONFIG = getCioConfig();
@@ -57,9 +63,31 @@ function getCookie(c_name) {
   return "";
 }
 
+function parseString(id) {
+  try {
+    return JSON.parse(decodeURIComponent(id));
+  } catch (error) {
+    return id;
+  }
+}
+
 export function getAnonymousID() {
+  // Now that we might be using the CDP, we need to look for this cookie
+  var ajs = getCookie('ajs_anonymous_id');
+  if (ajs && ajs !== '') {
+    // Segment can have quotes in their cookie value, so we'll need to decode
+    // and parse that.
+    return parseString(ajs);
+  }
+  // If analytics anonymous ID is not found, look for the JS snippet's anonymous ID
   return getCookie(window._cio.cookieNamespace + "anonid");
 }
+
+function findCustomer() {
+  return getCookie(_cio.cookieNamespace + 'id');
+}
+
+
 
 export function getIdentifier() {
   try {
@@ -93,7 +121,7 @@ export async function retrieveIdentifier() {
         resolve({anonymousIdentifier});
       }
       // If not found, continue attempting every ~10ms for about 1 second
-      if (intervalAttempt > 100) {
+      if (intervalAttempt > 200) {
         console.warn("no identifier found");
         clearInterval(cioLoadedInterval);
       }

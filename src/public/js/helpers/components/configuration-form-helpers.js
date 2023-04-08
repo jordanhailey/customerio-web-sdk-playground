@@ -1,6 +1,7 @@
 import { getCioConfig, updateCioConfig } from "../cio-helpers.js"; 
 const form = document.getElementById("set_cio_config");
 const siteIDInput = document.getElementById("siteID");
+const cdpTokenInput = document.getElementById("cdpToken");
 const cancelBtn = document.getElementById("cancel");
 const regionSelect = document.getElementById("region");
 const regionOptions = {
@@ -9,8 +10,9 @@ const regionOptions = {
 };
 
 function setFormValues() {
-  let { siteID: currentSiteID, region: currentRegion } = getCioConfig();
+  let { siteID: currentSiteID, region: currentRegion, cdpToken: currentCDPToken } = getCioConfig();
   siteIDInput.value = currentSiteID;
+  cdpTokenInput.value = currentCDPToken;
   if (`${currentRegion}`.toLowerCase() == "regionus") {
     regionOptions.eu.removeAttribute("selected");
     regionOptions.us.setAttribute("selected", true);
@@ -35,6 +37,7 @@ form.addEventListener("submit", function handleSubmit(submitEvent) {
   let cioConfig = {
     siteID: undefined,
     region: undefined,
+    cdpToken: undefined,
   };
   for (const [name, value] of data) {
     cioConfig = Object.assign({}, cioConfig, { [`${name}`]: value });

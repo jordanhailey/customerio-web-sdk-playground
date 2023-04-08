@@ -54,10 +54,13 @@ form.addEventListener("submit", function handleSubmit(submitEvent) {
     console.log("no identify call sent");
   } else {
     window._cio.identify(identifyCall);
+    window.analytics.identify(identifyCall.id,{...identifyCall})
+      .then(analyticsIdentify=>console.log({analyticsIdentify}))
+      .catch(err=>console.error(err))
     if (identifyCall.id) {
       setTimeout(() => {
         submitEvent.target.submit();
-      }, 5000);
+      }, 5000); 
     }
   }
 });

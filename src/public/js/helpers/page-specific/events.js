@@ -29,6 +29,9 @@ function sendEventMetadata({ event: { name, properties }, timestamp }) {
   properties.timestamp = timestamp;
   try {
     window._cio.track(name, { ...properties });
+    window.analytics.track(`cdp_${name}`, {...properties })
+      .then(analyticsTrack=>console.log({analyticsTrack}))
+      .catch(err=>console.error(err))
     console.log({ sentEvent: { name, properties } });
   } catch (err) {
     console.error({

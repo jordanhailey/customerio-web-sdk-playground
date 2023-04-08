@@ -1,5 +1,6 @@
 import "./helpers/cio-helpers.js"
 import "./cio-tracking-snippet.js";
+import "./cio-cdp-snippet.js";
 
 // IIFE - get current location and load relevant modules
 const LOCATION = window.location;
