@@ -10,22 +10,17 @@ export function getCioConfig() {
   let siteID,
     region,
     cdpToken,
+    cioConfig,
     storedState = JSON.parse(
       window.localStorage.getItem(CIO_LOCALSTORAGE_NAMESPACE)
     );
   if (storedState) {
-    siteID = storedState.siteID;
-    region = storedState.region;
-    cdpToken = storedState.cdpToken;
-  }
-  let cioConfig;
-  if (siteID && region) {
-    cioConfig = { siteID, region };
+    siteID = storedState.siteID || CIO_DEFAULTS.siteID;
+    region = storedState.region || CIO_DEFAULTS.region;
+    cdpToken = storedState.cdpToken || CIO_DEFAULTS.cdpToken;
+    cioConfig = {siteID, region, cdpToken}
   } else {
-    cioConfig = CIO_DEFAULTS;
-  }
-  if ( cdpToken ) {
-    cioConfig.cdpToken = cdpToken
+    cioConfig = CIO_DEFAULTS
   }
   return cioConfig;
 }
