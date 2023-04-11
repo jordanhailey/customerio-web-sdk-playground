@@ -1,35 +1,80 @@
-const CIO_LOCALSTORAGE_NAMESPACE = "TSE_CIO_SDK_CONFIG";
+import { getCurrentEpochTimestampInSeconds } from "./index.js" 
 
-const CIO_DEFAULTS = {
+const CIO_JS_SDK_LOCALSTORAGE_NAMESPACE = "CIO_WEB_SDK_CONFIG";
+
+const CIO_JS_SDK_DEFAULTS = {
   siteID: "",
   region: "regionUS",
+  autoPageTracking: "true",
 };
 
-export function getCioConfig() {
+/**
+ * 
+ * @param {string} key The value of the item to remove from localStorage
+ */
+export function wipeOutLocalStorage(key=""){
+  if (window.localStorage) {
+    if (key) {
+      console.warn("clearing entire localStorage value for", key, window.localStorage.getItem(key));
+      window.localStorage.removeItem(key);
+    } else {
+        console.warn("clearing entire localStorage Object",window.localStorage);
+        for (let item in window.localStorage) {
+          window.localStorage.removeItem(item);
+        }
+      }
+    }
+}
+// wipeOutLocalStorage()
+
+
+
+/**
+ * Fetches CIO Web SDK Config from localStorage, or provides defaults
+ * @returns {object} `cioConfig` The configuration for the CIO Web SDK containing the following properties
+ * @returns {string} `cioConfig.siteID`
+ * @returns {string} `cioConfig.region`
+ * @returns {string} `cioConfig.autoPageTracking`
+ */
+export function getCIOWebSDKConfig() {
   let siteID,
     region,
+    autoPageTracking,
     storedState = JSON.parse(
-      window.localStorage.getItem(CIO_LOCALSTORAGE_NAMESPACE)
+      window.localStorage.getItem(CIO_JS_SDK_LOCALSTORAGE_NAMESPACE)
     );
-  if (storedState) {
-    siteID = storedState.siteID || CIO_DEFAULTS.siteID;
-    region = storedState.region || CIO_DEFAULTS.region;
-  }
-  let cioConfig = { siteID, region };
+  siteID = storedState?.siteID || CIO_JS_SDK_DEFAULTS.siteID;
+  region = storedState?.region || CIO_JS_SDK_DEFAULTS.region;
+  autoPageTracking = storedState?.autoPageTracking || CIO_JS_SDK_DEFAULTS.autoPageTracking;
+  
+  let lastUpdatedEpoch = storedState?.lastUpdated || 0;
+
+  if ((getCurrentEpochTimestampInSeconds() - lastUpdatedEpoch) > (60*60*24*7)) {
+    console.log("invalid cache, over one week old, resetting localStorage and identifiers.")
+    wipeOutLocalStorage()
+    resetIdentifier()
+  } else {}
+  let cioConfig = { siteID, region, autoPageTracking, lastUpdated: getCurrentEpochTimestampInSeconds() };
+  if (!storedState) setCIOWebSDKConfig({...cioConfig})
   return cioConfig;
 }
 
-function setCioConfig({ siteID, region }) {
+export const CIO_JS_SDK_CONFIG = getCIOWebSDKConfig();
+
+function setCIOWebSDKConfig({ siteID, region, autoPageTracking, lastUpdated }) {
   window.localStorage.setItem(
-    CIO_LOCALSTORAGE_NAMESPACE,
-    JSON.stringify({ siteID, region })
+    CIO_JS_SDK_LOCALSTORAGE_NAMESPACE,
+    JSON.stringify({ siteID, region, autoPageTracking, lastUpdated })
   );
 }
 
-export function updateCioConfig({ siteID, region }) {
-  let newConfig = { siteID, region };
-  let currentConfig = getCioConfig();
-  let { siteID: previousSiteId, region: previousRegion } = getCioConfig();
+/**
+ * Updates CIO Web SDK Config
+ * @param {string} siteID _default: `""`_ @param {string} region _default: `"regionUS"`_ @param {string} autoPageTracking _default: `"true"`_
+ */
+export function updateCioWebSDKConfig({ siteID=CIO_JS_SDK_DEFAULTS.siteID, region=CIO_JS_SDK_DEFAULTS.region, autoPageTracking=CIO_JS_SDK_DEFAULTS.autoPageTracking }) {
+  let newConfig = { siteID, region, autoPageTracking, lastUpdated: getCurrentEpochTimestampInSeconds() };
+  let currentConfig = getCIOWebSDKConfig();
   let changesToConfig = false;
   for (let key in newConfig) {
     if (newConfig[key] != currentConfig[key]) {
@@ -38,12 +83,10 @@ export function updateCioConfig({ siteID, region }) {
     }
   }
   if (changesToConfig) {
-    setCioConfig({...newConfig});
+    setCIOWebSDKConfig({...newConfig});
     console.log({...newConfig});
   }
 }
-
-export const TSE_CIO_CONFIG = getCioConfig();
 
 function getCookie(c_name) {
   const allCookies = document.cookie;
@@ -60,7 +103,25 @@ function getCookie(c_name) {
 }
 
 export function getAnonymousID() {
+  var ajs = getCookie('ajs_anonymous_id');
+  if (ajs && ajs !== '') {
+    // Segment can have quotes in their cookie value, so we'll need to decode
+    // and parse that.
+    return parseString(ajs);
+  }  
   return getCookie(window._cio.cookieNamespace + "anonid");
+}
+
+function findCustomer() {
+  return getCookie(_cio.cookieNamespace + 'id');
+}
+
+function parseString(id) {
+  try {
+    return JSON.parse(decodeURIComponent(id));
+  } catch (error) {
+    return id;
+  }
 }
 
 export function resetIdentifier() {
@@ -68,6 +129,7 @@ export function resetIdentifier() {
   try {
     if (window._cio && !Array.isArray(window._cio)) {
       window._cio.reset();
+      window._cio.page(window.location.href);
       window.location.reload();
     } else throw "_cio has not yet been added to the window";
   } catch (err) {
@@ -106,32 +168,34 @@ export function retrieveIdentifier() {
         clearInterval(cioLoadedInterval);
         reject("no identifier found");
       }
-    }, 10);
+    }, 50);
   })
 }
 
-export function showIdentifierElements() {
-  retrieveIdentifier()
-    .then(id=>{
-      Array.from(document.getElementsByClassName("current-identifier"))
-        .forEach(function updateHTML(element) {
-          element.innerHTML = `<div class="p-2">Your current ${id.identifier ? 
-            "<span class=\"font-bold text-purple-500\">identifier</span>" : 
-            "<span class=\"font-bold text-purple-500\">anonymous identifier</span>"} 
-            is: <em class="font-bold text-purple-500">${
-              id.identifier ? 
-              id.identifier : 
-              id.anonymousIdentifier
-            }</em></div>`
-        });
-
-      Array.from(document.getElementsByClassName("reset-current-identifier"))
-        .forEach(function updateHTML(element) {
-          element.classList.remove("hidden");
-          element.addEventListener("click", function resetIdentifiers(){
-            resetIdentifier();
+export async function showIdentifierElements() {
+  return new Promise(function fetchingIdentifier(resolve,reject){
+    retrieveIdentifier()
+      .then(id=>{
+        Array.from(document.getElementsByClassName("current-identifier"))
+          .forEach(function updateHTML(element) {
+            element.innerHTML = `<div class="p-2">Your current ${id.identifier ? 
+              "<span class=\"font-bold text-purple-500\">identifier</span>" : 
+              "<span class=\"font-bold text-purple-500\">anonymous identifier</span>"} 
+              is: <em class="font-bold text-purple-500">${
+                id.identifier ? 
+                id.identifier : 
+                id.anonymousIdentifier
+              }</em></div>`
+          });
+        Array.from(document.getElementsByClassName("reset-current-identifier"))
+          .forEach(function updateHTML(element) {
+            element.classList.remove("hidden");
+            element.addEventListener("click", function resetIdentifiers(){
+              resetIdentifier();
+            })
           })
-        })
-    })
-    .catch(function idNotFound(err){console.warn(err);return ""});
+        resolve(true);
+      })
+      .catch(function idNotFound(err){console.warn(err);reject()});
+  }) 
 }

@@ -1,5 +1,4 @@
 import { getCurrentEpochTimestampInSeconds } from "../index.js";
-import { showIdentifierElements } from "../cio-helpers.js";
 
 const eventPayloads = {
   "event-1": {
@@ -11,7 +10,7 @@ const eventPayloads = {
   },
 };
 
-function clickListenerToCIO(button) {
+function clickListenerToCIOWebSDKEvent(button) {
   return function (eventName) {
     button.addEventListener("click", function clickEventListener(e) {
       const timestamp = getCurrentEpochTimestampInSeconds();
@@ -22,9 +21,17 @@ function clickListenerToCIO(button) {
     });
   };
 }
-function getEventMetadata(eventName) {
-  return eventPayloads[eventName];
+
+function clickListenerToCIOWebSDKPageEvent(button) {
+  let hash = button.dataset.hash || "#";
+  button.addEventListener("click", function clickEventListener(e) {
+    let loc = new URL(window.location.href);
+    loc.hash = hash;
+    window._cio.page(loc.href);
+    window.location.replace(loc.href);
+  });
 }
+
 function sendEventMetadata({ event: { name, properties }, timestamp }) {
   properties.timestamp = timestamp;
   try {
@@ -37,6 +44,10 @@ function sendEventMetadata({ event: { name, properties }, timestamp }) {
   }
 }
 
+function getEventMetadata(eventName) {
+  return eventPayloads[eventName];
+}
+
 // Get buttons
 function getElementById(id) {
   return document.getElementById(id);
@@ -44,11 +55,16 @@ function getElementById(id) {
 
 const sendTest1 = getElementById("send-event-1");
 
+const sendPage1 = getElementById("send-page-1");
+const sendPage2 = getElementById("send-page-2");
+const sendPage3 = getElementById("send-page-3");
+const sendPage4 = getElementById("send-page-4");
 
 export default function events() {
   // Attach Event Listeners
-  clickListenerToCIO(sendTest1)("event-1");
-
-  // Show Current Identifier
-  showIdentifierElements()
+  clickListenerToCIOWebSDKEvent(sendTest1)("event-1");
+  clickListenerToCIOWebSDKPageEvent(sendPage1);
+  clickListenerToCIOWebSDKPageEvent(sendPage2);
+  clickListenerToCIOWebSDKPageEvent(sendPage3);
+  clickListenerToCIOWebSDKPageEvent(sendPage4);
 }

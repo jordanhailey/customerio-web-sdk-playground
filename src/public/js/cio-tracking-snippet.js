@@ -1,5 +1,5 @@
-import { TSE_CIO_CONFIG } from "./helpers/cio-helpers.js";
-if (TSE_CIO_CONFIG.siteID && TSE_CIO_CONFIG.region){
+import { CIO_JS_SDK_CONFIG } from "./helpers/cio-helpers.js";
+if (CIO_JS_SDK_CONFIG.siteID){
   /* altered for ES6 module usage */
   window._cio = window._cio || [];
   (async function () {
@@ -10,12 +10,12 @@ if (TSE_CIO_CONFIG.siteID && TSE_CIO_CONFIG.region){
   s = document.getElementsByTagName('script')[0];
   t.async = true;
   t.id    = 'cio-tracker';
-  t.setAttribute('data-site-id', TSE_CIO_CONFIG.siteID );
+  t.setAttribute('data-site-id', CIO_JS_SDK_CONFIG.siteID );
   t.setAttribute('data-use-array-params', 'true');
-  t.setAttribute('data-auto-track-page', 'true');
+  t.setAttribute('data-auto-track-page', (CIO_JS_SDK_CONFIG.autoPageTracking == false ? false : true) );
   t.setAttribute('data-use-in-app', 'true');
   /* altered for dynamic region selection */
-  if (/eu/.test(`${TSE_CIO_CONFIG.region}`.toLowerCase()) == false) {
+  if (/eu/.test(`${CIO_JS_SDK_CONFIG.region}`.toLowerCase()) == false) {
     t.src = 'https://assets.customer.io/assets/track.js';
   } else {
     //account is in the EU, use:
