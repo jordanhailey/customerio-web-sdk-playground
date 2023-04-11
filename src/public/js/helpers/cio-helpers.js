@@ -1,8 +1,8 @@
 const CIO_LOCALSTORAGE_NAMESPACE = "TSE_CIO_SDK_CONFIG";
 
 const CIO_DEFAULTS = {
-  siteID: "YOUR_SITE_ID",
-  region: "us",
+  siteID: "",
+  region: "regionUS",
 };
 
 export function getCioConfig() {
@@ -12,15 +12,10 @@ export function getCioConfig() {
       window.localStorage.getItem(CIO_LOCALSTORAGE_NAMESPACE)
     );
   if (storedState) {
-    siteID = storedState.siteID;
-    region = storedState.region;
+    siteID = storedState.siteID || CIO_DEFAULTS.siteID;
+    region = storedState.region || CIO_DEFAULTS.region;
   }
-  let cioConfig;
-  if (siteID && region) {
-    cioConfig = { siteID, region };
-  } else {
-    cioConfig = CIO_DEFAULTS;
-  }
+  let cioConfig = { siteID, region };
   return cioConfig;
 }
 
@@ -32,13 +27,20 @@ function setCioConfig({ siteID, region }) {
 }
 
 export function updateCioConfig({ siteID, region }) {
+  let newConfig = { siteID, region };
+  let currentConfig = getCioConfig();
   let { siteID: previousSiteId, region: previousRegion } = getCioConfig();
-  if (!previousSiteId && previousRegion) {
-    setCioConfig({ siteID, region });
-  } else if (siteID != previousSiteId || region != previousRegion) {
-    setCioConfig({ siteID, region });
-  } else console.log("Same values provided, No changes made to CIO config");
-  console.log({ siteID, region });
+  let changesToConfig = false;
+  for (let key in newConfig) {
+    if (newConfig[key] != currentConfig[key]) {
+      changesToConfig = true;
+      console.log(`Updating ${key}`);
+    }
+  }
+  if (changesToConfig) {
+    setCioConfig({...newConfig});
+    console.log({...newConfig});
+  }
 }
 
 export const TSE_CIO_CONFIG = getCioConfig();
@@ -61,59 +63,75 @@ export function getAnonymousID() {
   return getCookie(window._cio.cookieNamespace + "anonid");
 }
 
-export function getIdentifier() {
+export function resetIdentifier() {
+  let allowedRejectionReason = "_cio has not yet been added to the window";
   try {
-    if (!window._cio) {
-      throw "_cio has not yet been added to the window";
-    }
-    return window._cio._findCustomer();
+    if (window._cio && !Array.isArray(window._cio)) {
+      window._cio.reset();
+      window.location.reload();
+    } else throw "_cio has not yet been added to the window";
   } catch (err) {
-    console.error(err);
+    if (err != allowedRejectionReason) console.error(err);
+  }
+}
+export function getIdentifier() {
+  let allowedRejectionReason = "_cio has not yet been added to the window";
+  try {
+    if (window._cio && !Array.isArray(window._cio)) {
+      let [identifier, anonymousIdentifier] = [window._cio._findCustomer(), getAnonymousID()];
+      return identifier != "" ? {identifier} : {anonymousIdentifier};
+    } else throw "_cio has not yet been added to the window";
+  } catch (err) {
+    if (err != allowedRejectionReason) console.error(err);
     return "";
   }
 }
 
-export async function retrieveIdentifier() {
+export function retrieveIdentifier() {
   let intervalAttempt = 0;
   return new Promise((resolve,reject)=>{
     if (window.TSE_CURRENT_IDENTIFIER) {
       resolve(window.TSE_CURRENT_IDENTIFIER);
     }
-    let cioLoadedInterval = setInterval(() => {
+    let cioLoadedInterval = setInterval(function searchingForIdentifier() {
       intervalAttempt++;
-      let identifier = getIdentifier();
-      let anonymousIdentifier = getAnonymousID();
-      if (identifier) {
+      const id = { ...getIdentifier() };
+      if ( id.identifier || id.anonymousIdentifier ) {
         clearInterval(cioLoadedInterval);
-        window.TSE_CURRENT_IDENTIFIER = {identifier}
-        resolve({identifier});
-      } else if (anonymousIdentifier) {
-        clearInterval(cioLoadedInterval);
-        window.TSE_CURRENT_IDENTIFIER = {anonymousIdentifier}
-        resolve({anonymousIdentifier});
+        window.TSE_CURRENT_IDENTIFIER = id
+        resolve(id);
       }
       // If not found, continue attempting every ~10ms for about 1 second
       if (intervalAttempt > 100) {
-        console.warn("no identifier found");
         clearInterval(cioLoadedInterval);
+        reject("no identifier found");
       }
     }, 10);
   })
 }
 
-export function showIdentifierElements () {
-  Array.from(document.getElementsByClassName("current-identifier"))
-    .forEach(async (element) => {
-      let currentIdentifier = await retrieveIdentifier().then(id=>id);
-      element.innerHTML = (
-        `<div class="p-2">Your current ${currentIdentifier.identifier ? 
-          "<span class=\"font-bold text-purple-500\">identifier</span>" : 
-          "<span class=\"font-bold text-purple-500\">anonymous identifier</span>"} 
-          is: <em class="font-bold text-purple-500">${
-            currentIdentifier.identifier ? 
-            currentIdentifier.identifier : 
-            currentIdentifier.anonymousIdentifier
-          }</em></div>`
-        );
-    });
+export function showIdentifierElements() {
+  retrieveIdentifier()
+    .then(id=>{
+      Array.from(document.getElementsByClassName("current-identifier"))
+        .forEach(function updateHTML(element) {
+          element.innerHTML = `<div class="p-2">Your current ${id.identifier ? 
+            "<span class=\"font-bold text-purple-500\">identifier</span>" : 
+            "<span class=\"font-bold text-purple-500\">anonymous identifier</span>"} 
+            is: <em class="font-bold text-purple-500">${
+              id.identifier ? 
+              id.identifier : 
+              id.anonymousIdentifier
+            }</em></div>`
+        });
+
+      Array.from(document.getElementsByClassName("reset-current-identifier"))
+        .forEach(function updateHTML(element) {
+          element.classList.remove("hidden");
+          element.addEventListener("click", function resetIdentifiers(){
+            resetIdentifier();
+          })
+        })
+    })
+    .catch(function idNotFound(err){console.warn(err);return ""});
 }

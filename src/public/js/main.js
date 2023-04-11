@@ -3,22 +3,43 @@ import "./cio-tracking-snippet.js";
 
 // IIFE - get current location and load relevant modules
 const LOCATION = window.location;
-(()=>{
+function loadPageJS(){
   import("./helpers/components/nav-helpers.js")
-    .then(obj => (obj))
-    .catch(err => (console.error(err)));
-  switch (LOCATION.pathname) {
+    .then(function navComponentJSLoaded(nav){return nav})
+    .catch(function navComponentJSNotFound(err){console.error(err)});
+  let pageSpecificJS = "";
+    switch (LOCATION.pathname) {
     case "/":
-      import("./helpers/page-specific/index.js").then(js=>(js)).catch(err=>(console.error(err)))
+      pageSpecificJS = "index"
       break;
     case "/configuration/":
-      import("./helpers/page-specific/configuration.js").then(js=>(js)).catch(err=>(console.error(err)))
+      pageSpecificJS = "configuration"
       break;
-    case "/events/":
-      import("./helpers/page-specific/events.js").then(js=>(js)).catch(err=>(console.error(err)))
+      case "/events/":
+      pageSpecificJS = "events"
       break;
     default:
       console.log(LOCATION.pathname)
       break;
   }
-})()
+  if (pageSpecificJS) {
+    getPageSpecificJS(pageSpecificJS)
+  }
+}
+
+function getPageSpecificJS(pageName){ 
+  const moduleFailedToLoadError = "no default export";
+  let jsFile;
+  import(`./helpers/page-specific/${pageName}.js`)
+  .then(function pageSpecificJSFetched(pageHelpers){
+    jsFile = pageHelpers; 
+    if (pageHelpers.default) return pageHelpers.default();
+    else throw moduleFailedToLoadError;
+  })
+  .catch(function errorLoadingPageSpecificJS(moduleError){
+    if (moduleError !== moduleFailedToLoadError) console.warn(moduleError)
+    })
+}
+
+loadPageJS()
+

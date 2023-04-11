@@ -44,8 +44,11 @@ function getElementById(id) {
 
 const sendTest1 = getElementById("send-event-1");
 
-// Attach Event Listeners
-clickListenerToCIO(sendTest1)("event-1");
 
-// Show Current Identifier
-showIdentifierElements()
+export default function events() {
+  // Attach Event Listeners
+  clickListenerToCIO(sendTest1)("event-1");
+
+  // Show Current Identifier
+  showIdentifierElements()
+}
