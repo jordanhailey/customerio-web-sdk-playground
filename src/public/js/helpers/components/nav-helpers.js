@@ -38,4 +38,8 @@ showIdentifierElements()
   })
   .catch(function identifierNotFound(err){
 
-  })
+  });
+
+document.querySelectorAll("add-sticky").forEach(el=>{
+  el.classList.add("sticky");
+})
