@@ -12,7 +12,7 @@ if (CIO_JS_SDK_CONFIG.siteID){
   t.id    = 'cio-tracker';
   t.setAttribute('data-site-id', CIO_JS_SDK_CONFIG.siteID );
   t.setAttribute('data-use-array-params', 'true');
-  t.setAttribute('data-auto-track-page', (CIO_JS_SDK_CONFIG.autoPageTracking == false ? false : true) );
+  t.setAttribute('data-auto-track-page', (CIO_JS_SDK_CONFIG.autoPageTracking == "false" ? false : true) );
   t.setAttribute('data-use-in-app', 'true');
   /* altered for dynamic region selection */
   if (/eu/.test(`${CIO_JS_SDK_CONFIG.region}`.toLowerCase()) == false) {
