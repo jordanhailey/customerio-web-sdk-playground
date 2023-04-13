@@ -28,6 +28,14 @@ function clickListenerToCIOWebSDKPageEvent(button) {
     let loc = new URL(window.location.href);
     loc.hash = hash;
     window._cio.page(loc.href);
+    if (window.analytics) {
+      try {
+        window.analytics.page(loc.href)
+          .then(call=>console.log(call))
+      } catch (err) {
+        console.error(err)
+      }
+    }
     window.location.replace(loc.href);
   });
 }
@@ -37,6 +45,10 @@ function sendEventMetadata({ event: { name, properties }, timestamp }) {
   try {
     window._cio.track(name, { ...properties });
     console.log({ sentEvent: { name, properties } });
+    if (window.analytics) {
+      window.analytics.track(`cdp_${name}`, { ...properties })
+        .then(call=>{console.log("Analytics call sent",call)})
+    }
   } catch (err) {
     console.error({
       error: { message: err, metaData: { name, ...properties } },
