@@ -1,6 +1,6 @@
 <section id="configuration-form" class="py-5 px-4 sm:px-6 my-8 divide-y divide-gray-300 overflow-hidden rounded-lg bg-gray-100 shadow">
   <div class="py-5">
-    <h2 class="pb-5 text-3xl sm:text-4xl font-semibold leading-7 text-gray-900">Your Current Customer.io JS Snippet Configuration</h2>
+    <h2 class="pb-5 text-3xl sm:text-4xl font-semibold leading-7 text-gray-900">JavaScript Snippet Configuration</h2>
     <p class="mt-1 text-sm leading-6 text-gray-600">This data will be used to link your activity on this site to your Customer.io workspace.</p>
   </div>
   <div class="py-5">
@@ -8,7 +8,7 @@
       <div class="space-y-12 my-4">
         <div class="border-b border-gray-900/10 pb-12">
           <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            <div class="sm:col-span-4">
+            <div class="sm:col-span-2">
               <label for="siteID" class="block text-sm font-medium leading-6 text-gray-900">Site ID</label>
               <div class="mt-2">
                 <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-teal-600 sm:max-w-md">
@@ -21,7 +21,7 @@
                 </div>
               </div>
             </div>
-            <div class="sm:col-span-3">
+            <div class="sm:col-span-2">
               <label for="region" class="block text-sm font-medium leading-6 text-gray-900">Region</label>
               <div class="mt-2">
                 <select
@@ -36,8 +36,8 @@
                 </select>
               </div>
             </div>
-            <div class="sm:col-span-3">
-              <label for="autoPageTracking" class="block text-sm font-medium leading-6 text-gray-900">Auto Page Tracking</label>
+            <div class="sm:col-span-2">
+              <label for="autoPageTracking" class="block text-sm font-medium leading-6 text-gray-900">Page Tracking</label>
               <div class="mt-2">
                 <select
                   id="autoPageTracking"
@@ -46,8 +46,8 @@
                   <option
                     selected
                     id="pageTrackingTrue"
-                    value="true">Yes</option>
-                  <option id="pageTrackingFalse" value="false">No</option>
+                    value="true">Auto</option>
+                  <option id="pageTrackingFalse" value="false">Manual</option>
                 </select>
               </div>
             </div>
