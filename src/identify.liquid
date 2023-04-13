@@ -1,7 +1,181 @@
 ---
   permalink: /identify/
   meta_title: identify
-  title: identify
+  title: Identifying Profiles
   link_title: Identify
   navIndex: 3
 ---
+
+<section id="identify" class="py-5 px-4 sm:px-6 my-8">
+  <h2 class="my-5 text-3xl sm:text-4xl">
+    What is my identifier?
+  </h2>
+  {% include 'partials/current-identifier' %}
+  <p class="my-4 max-w-4xl">
+    If you're looking at an anonymous identifier, that means we're only capturing anonymous events and page view data. If in the future you are identified, then
+    <a href="/events/#anonymous-events" class="font-bold text-teal-600 hover:text-teal-900">we'll merge the activity of this 
+      anonymous id</a>
+    from the past 30 days.
+  </p>
+  <p class="mt-4 max-w-4xl">
+    If you are already identified, that means all events and page view data are actively being attributed to your browsing session on this website. Want to change your identifier? Try the form below...</p>
+</section>
+<section id="identify" class="py-5 px-4 sm:px-8 my-4 divide-y divide-gray-300 overflow-hidden rounded-lg bg-gray-100 shadow">
+  <div class="py-5">
+    <h2 class="pb-5 text-3xl sm:text-4xl font-semibold leading-7 text-gray-900">Identify a Profile</h2>
+    <p class="mt-1 text-sm leading-6 text-gray-600">This data will be used to send an <code class="text-red-500 font-mono text-sm">identify</code> call to your Customer.io workspace.</p>
+    <div id="form-warning" class="hidden bg-yellow-400 rounded-md -mx-2 px-2 sm:px-4">
+      <h3 class="py-2 font-semibold text-2xl sm:text-3xl">Heads Up</h3>
+      <p class="py-2">
+        It looks like your CIO snippet is not loaded, so these form fields are disabled.
+      </p>
+    </div>
+  </div>
+  <div class="py-5">
+    <form id="identify-form" action="/identify/#identify-form">
+      <div class="space-y-12 my-4">
+        <div class="border-b border-gray-900/10 pb-12">
+          <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div class="sm:col-span-4">
+              <label for="id" class="block text-sm font-medium leading-6 text-gray-900"><code class="text-red-500 font-mono text-sm">id</code> (use either an ID or an email address)</label>
+              <div class="mt-2">
+                <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-teal-600 sm:max-w-md">
+                  <input
+                    disabled
+                    type="text"
+                    name="id"
+                    id="id"
+                    class="block flex-1 border-0 rounded-md py-1.5 px-1.5 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    placeholder="identifier">
+                </div>
+              </div>
+            </div>
+            <div class="sm:col-span-4">
+              <label for="email" class="block text-sm font-medium leading-6 text-gray-900"><code class="text-red-500 font-mono text-sm">email</code> (this should obviously by an email address)</label>
+              <div class="mt-2">
+                <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-teal-600 sm:max-w-md">
+                  <input
+                    disabled
+                    type="email"
+                    name="email"
+                    id="email"
+                    class="block flex-1 border-0 rounded-md py-1.5 px-1.5 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    placeholder="email@example.com">
+                </div>
+              </div>
+            </div>
+            <div class="sm:col-span-4">
+              <label for="customVariableName" class="block text-sm font-medium leading-6 text-gray-900">Custom Variable Name</label>
+              <div class="mt-2">
+                <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-teal-600 sm:max-w-md">
+                  <input
+                    disabled
+                    type="text"
+                    name="customVariableName"
+                    id="customVariableName"
+                    class="block flex-1 border-0 rounded-md py-1.5 px-1.5 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    placeholder="Name of your custom variable">
+                </div>
+              </div>
+            </div>
+            <div class="sm:col-span-4">
+              <label for="customVariableValue" class="block text-sm font-medium leading-6 text-gray-900">Custom Variable Value — an empty value will be passed as an empty string</label>
+              <div class="mt-2">
+                <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-teal-600 sm:max-w-md">
+                  <input
+                    disabled
+                    type="text"
+                    name="customVariableValue"
+                    id="customVariableValue"
+                    class="block flex-1 border-0 rounded-md py-1.5 px-1.5 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    placeholder="Value for your Custom Variable">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-6 flex items-center justify-start gap-x-6">
+        <button
+          type="button"
+          id="cancel"
+          class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
+        <button type="submit" class="rounded-md bg-purple-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600 inline-flex gap-2">Identify{% include 'partials/svg/paper-plane-icon.svg' %} </button>
+      </div>
+    </form>
+  </div>
+</section>
+<section id="output" class="pb-10">
+  <pre id="identify-call-warning" class="bg-yellow-400 rounded-md px-4 sm:px-6"></pre>
+  <pre id="identify-call-error" class="bg-red-400 rounded-md px-4 sm:px-6"></pre>
+  <pre id="identify-call-output"></pre>
+</section>
+<section id="identify-examples" class="py-5 px-4 sm:px-6 my-8">
+  <h2 class="my-5 text-3xl sm:text-4xl">
+    Examples of <code class="text-red-500 font-mono text-2xl sm:text-3xl">identify</code> calls
+  </h2>
+  <p class="my-4 max-w-4xl">
+    Below we'll showcase four <code class="text-red-500 font-mono text-sm">identify</code> calls and what the result will look like in your workspace.
+  </p>
+  <p class="my-4 max-w-4xl">
+    <em>To be continued...</em>
+  </p>
+</section>
+<section id="details" class="py-5 px-4 sm:px-6 my-8 bg-gray-100 rounded-md">
+  <h2 class="my-5 text-3xl sm:text-4xl">
+    FAQ
+  </h2>
+  <p class="px-4 sm:px-6"></p>
+  <article class="p-2">
+    <h3 class="font-semibold">Can I just use the email property?</h3>
+    <details class=" border-solid border-b-2 border-gray-800 my-4">
+      <summary class="container cursor-pointer">
+        <strong>No</strong>, the
+        <code class="text-red-500 font-mono text-sm">identify</code>
+        call will not work without the
+        <code class="text-red-500 font-mono text-sm">id</code>
+        property filled in.</summary>
+      <p class="p-2">
+        If your workspace is a multi-identifier workspace, you
+        <strong>
+          <em>can</em>
+        </strong>
+        send an email address in the
+        <code class="text-red-500 font-mono text-sm">id</code>
+        property and Customer.io will know that you want to assign the email address to the
+        <code class="text-red-500 font-mono text-sm">email</code>
+        profile attribute value.
+      </p>
+    </details>
+  </article>
+  <article class="rounded-lg bg-white p-2">
+    <h3 class="font-semibold">I want to send In-App Messages, which idenitifier should I be targeting?</h3>
+    <details class=" border-solid border-b-2 border-gray-800 my-4">
+      <summary class="container cursor-pointer">
+        In single-identifier 
+        (<code class="text-red-500 font-mono text-sm">id</code>
+        only) workspaces, use
+        <code class="text-red-500 font-mono text-sm">
+          {% raw %}
+            {{ customer.id }}{% endraw %}
+        </code>
+      </summary>
+      <p class="p-2">
+        If your workspace is a single-identifier workspace, your target audience should always be
+      <code class="text-red-500 font-mono text-sm">{% raw %}{{ customer.id }}{% endraw %}</code>. However, if you happen to be setting the <code class="text-red-500 font-mono text-sm">id</code> and the <code class="text-red-500 font-mono text-sm">email</code> to the same value, then you can get away with using <code class="text-red-500 font-mono text-sm">{% raw %}{{ customer.email }}{% endraw %}</code>, but we would never recommend that since <code class="text-red-500 font-mono text-sm">{% raw %}{{ customer.email }}{% endraw %}</code> would not be an identifier.
+      </p>
+    </details>
+    <details class=" border-solid border-b-2 border-gray-800 my-4">
+      <summary class="container cursor-pointer">
+        In multi-identifier workspaces (<code class="text-red-500 font-mono text-sm">id</code>
+        and
+        <code class="text-red-500 font-mono text-sm">email</code>), you will <em>still</em> likely be using <code class="text-red-500 font-mono text-sm">{% raw %}{{ customer.id }}{% endraw %}</code> as your target audience.
+        </code>
+      </summary>
+      <p class="p-2">
+        What really matters is how your developers are calling the <code class="text-red-500 font-mono text-sm">identify</code> function. Whichever way they are identifying the profile, the identifier value you use for in-app messages is only one value. So it will either be <code class="text-red-500 font-mono text-sm">{% raw %}{{customer.id}}{% endraw %}</code> or <code class="text-red-500 font-mono text-sm">{% raw %}{{ customer.email }}{% endraw %}</code>. It can never be both.
+      </p>
+    </details>
+  </article>
+  <p class="p-2">Review <a href="#identify-examples" class="font-bold text-teal-600 hover:text-teal-900">this subheading</a> to learn more.</p>
+</section>

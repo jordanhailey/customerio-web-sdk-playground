@@ -18,6 +18,9 @@ function loadPageJS(){
       case "/events/":
       pageSpecificJS = "events"
       break;
+      case "/identify/":
+      pageSpecificJS = "identify"
+      break;
     default:
       console.log(LOCATION.pathname)
       break;
