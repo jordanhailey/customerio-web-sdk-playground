@@ -25,7 +25,7 @@ export function wipeOutLocalStorage(key=""){
       }
     }
 }
-// wipeOutLocalStorage()
+// wipeOutLocalStorage();
 
 
 
@@ -50,9 +50,9 @@ export function getCIOWebSDKConfig() {
   let lastUpdatedEpoch = storedState?.lastUpdated || 0;
 
   if ((getCurrentEpochTimestampInSeconds() - lastUpdatedEpoch) > (60*60*24*7)) {
-    console.log("invalid cache, over one week old, resetting localStorage and identifiers.")
-    wipeOutLocalStorage()
-    resetIdentifier()
+    // console.log("invalid cache, over one week old, resetting localStorage and identifiers.")
+    // wipeOutLocalStorage()
+    // resetIdentifier()
   } else {}
   let cioConfig = { siteID, region, autoPageTracking, lastUpdated: getCurrentEpochTimestampInSeconds() };
   if (!storedState) setCIOWebSDKConfig({...cioConfig})
@@ -129,7 +129,10 @@ export function resetIdentifier() {
   try {
     if (window._cio && !Array.isArray(window._cio)) {
       window._cio.reset();
-      window._cio.page(window.location.href);
+      window.localStorage.removeItem("gist.web.userToken");
+      if (window.analytics) {
+        window.analytics.reset();
+      }
       window.location.reload();
     } else throw "_cio has not yet been added to the window";
   } catch (err) {
@@ -163,17 +166,17 @@ export function retrieveIdentifier() {
         window.TSE_CURRENT_IDENTIFIER = id
         resolve(id);
       }
-      // If not found, continue attempting every ~10ms for about 1 second
-      if (intervalAttempt > 100) {
+      // If not found, continue attempting every ~100ms for about 1 second
+      if (intervalAttempt > 10) {
         clearInterval(cioLoadedInterval);
         reject("no identifier found");
       }
-    }, 50);
+    }, 100);
   })
 }
 
 export async function showIdentifierElements() {
-  return new Promise(function fetchingIdentifier(resolve,reject){
+  return new Promise(async function fetchingIdentifier(resolve,reject){
     retrieveIdentifier()
       .then(id=>{
         Array.from(document.getElementsByClassName("current-identifier"))
@@ -196,6 +199,6 @@ export async function showIdentifierElements() {
           })
         resolve(true);
       })
-      .catch(function idNotFound(err){console.warn(err);reject()});
+      .catch(function idNotFound(err){reject(err)});
   }) 
 }

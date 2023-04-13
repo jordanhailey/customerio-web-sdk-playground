@@ -78,6 +78,18 @@ export default function identify(){
       console.log("no identify call sent");
     } else {
       window._cio.identify(identifyCall);
+      if (window.analytics) {
+        let userID = identifyCall.id
+        let traits = {...identifyCall}
+        delete(traits.id)
+        debugger
+        try {
+          window.analytics.identify(userID, traits)
+            .then(call=>console.log(call))
+        } catch (error) {
+          console.error(error)
+        }
+      }
       if (identifyCall.id) {
         setTimeout(() => {
           submitEvent.target.submit();
