@@ -24,6 +24,9 @@ function loadPageJS(){
       case "/in-app/":
       pageSpecificJS = "in-app"
       break;
+      case "/cdp/":
+      pageSpecificJS = "cdp"
+      break;
     default:
       console.log(LOCATION.pathname)
       break;
