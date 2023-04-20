@@ -90,7 +90,7 @@ export default function identify(){
       if (identifyCall.id) {
         setTimeout(() => {
           submitEvent.target.submit();
-        }, 10000); 
+        }, 5000); 
       }
     }
   });
