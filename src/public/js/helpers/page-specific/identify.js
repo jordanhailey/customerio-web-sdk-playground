@@ -1,3 +1,5 @@
+import { cdpIdentify } from "../cdp-helpers.js";
+import { cioIdentify } from "../cio-helpers.js";
 import { getCurrentEpochTimestampInSeconds } from "../index.js";
 
 
@@ -12,35 +14,36 @@ const warningElement = document.getElementById("identify-call-warning");
 const errorElement = document.getElementById("identify-call-error");
 const output = document.getElementById("identify-call-output");
 
-let isCioInitialized = {timeout:undefined,attempts:0};
-function checkForCIO(){
+let isTrackerInitialized = {timeout:undefined,attempts:0};
+function checkForCIOorCDP(){
   try {
-    clearTimeout(isCioInitialized.timeout);
-    if (!window?._cio?.identify) {
-      isCioInitialized.attempts++
-      if (isCioInitialized.attempts > 10) {
-        clearTimeout(isCioInitialized.timeout)
-        throw "Web SDK not loaded"
-      }
-      isCioInitialized.timeout = setTimeout(()=>{
-        checkForCIO();
-      },100)
-    } else {
+    clearTimeout(isTrackerInitialized.timeout);
+    if (window?._cio?.identify || window?.analytics?.identify) {
       inputs.forEach(el=>{
-        el.removeAttribute("disabled")
+        el.removeAttribute("disabled");
       })
+    } else {
+      isTrackerInitialized.attempts++
+      if (isTrackerInitialized.attempts > 4) {
+        clearTimeout(isTrackerInitialized.timeout)
+        throw "Web SDK and CDP is not loaded"
+      }
+      isTrackerInitialized.timeout = setTimeout(()=>{
+        checkForCIOorCDP();
+      },500)
     }
   } catch (error) {
+    console.log(error);
     formWarning.classList.remove("hidden");
   }
 }
 
 export default function identify(){
-  checkForCIO()  
+  checkForCIOorCDP()  
   
   form.addEventListener("submit", function handleSubmit(submitEvent) {
     submitEvent.preventDefault();
-    console.log({submitEvent});
+    // console.log({submitEvent});
     errorElement.innerText = "";
     warningElement.innerText = "";
     output.innerText = "";
@@ -72,22 +75,18 @@ export default function identify(){
       identifyCall[identifyProperties.customVariableName] =
         identifyProperties.customVariableValue || "";
     }
-    console.log({ identifyProperties, identifyCall });
     output.innerText = JSON.stringify(identifyCall, null, 2);
     if (Object.keys(identifyCall).length === 0) {
-      console.log("no identify call sent");
+      console.warn("no identify call sent");
     } else {
-      window._cio.identify(identifyCall);
+      if (window._cio) {
+        cioIdentify(identifyCall);
+      }
       if (window.analytics) {
         let userID = identifyCall.id
         let traits = {...identifyCall}
         delete(traits.id)
-        try {
-          window.analytics.identify(userID, traits)
-            .then(call=>console.log(call))
-        } catch (error) {
-          console.error(error)
-        }
+        cdpIdentify({userID,traits})
       }
       if (identifyCall.id) {
         setTimeout(() => {

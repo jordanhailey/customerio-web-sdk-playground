@@ -1,4 +1,4 @@
-import { cdpGetIdentifier } from "../cdp-helpers.js";
+import { cdpShowIdentifierElements } from "../cdp-helpers.js";
 import { cioShowIdentifierElements } from "../cio-helpers.js";
 
 // Nave buttons and icons
@@ -57,7 +57,7 @@ function fetchIdentifier(){
         successfullyFoundID(id);
       })
       .catch(err=>{{
-        cdpGetIdentifier().then(id=>{
+        cdpShowIdentifierElements().then(id=>{
           clearTimeout(timeout);
           successfullyFoundID(id);
         }).catch(e=>{

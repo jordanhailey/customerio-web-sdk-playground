@@ -170,3 +170,12 @@ export async function cioShowIdentifierElements() {
       .catch(function idNotFound(err){reject(err)});
   }) 
 }
+
+export async function cioIdentify({id,...args}){
+  try {
+    window._cio.identify({id,...args});
+    console.log("_cio identify call sent",{id,...args});
+  } catch (err) {
+    console.error(err)
+  }
+}

@@ -43,7 +43,7 @@ export function cdpResetConfig(){
   cdpSetConfig(CDP_DEFAULT_CONFIG)
 }
 
-export async function cdpGetIdentifier(){
+export async function cdpShowIdentifierElements(){
   return new Promise((resolve,reject)=>{
     try {
       let userID = window?.analytics?._user?.id(),
@@ -60,9 +60,16 @@ export async function cdpGetIdentifier(){
   })
 }
 
-export async function cdpIdentify(id,traits){
-
+export async function cdpIdentify({userID,traits}){
+  try {
+    window.analytics.identify(userID, traits)
+      .then(call=>console.log(call))
+    console.log("cdp identify call sent",{userID,traits});
+  } catch (err) {
+    console.error(err)
+  }
 }
+
 export async function cdpTrack(id,traits){
 
 }
