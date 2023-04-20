@@ -56,8 +56,10 @@ export async function cdpGetIdentifier() {
           try {
             cioGetIdentifier()
               .then(({identifier})=>{
-                cdpIdentify({userID:identifier});
-                idFound = true;
+                if (identifier != "") {
+                  cdpIdentify({userID:identifier});
+                  idFound = true;
+                  }
                 resolve({userID:identifier,anonymousIdentifier})
               })
           } catch (err) {}
@@ -78,11 +80,9 @@ export async function cdpGetIdentifier() {
 }
 
 export async function cdpIdentify({userID,traits}){
-  console.log({userID,traits});
   try {
     window.analytics.identify(userID, traits)
-      .then(call=>console.log(call))
-    console.log("CDP identify call sent",{userID,traits});
+      .then(call=>console.log("CDP identify call sent",call))
   } catch (err) {
     console.error(err)
   }
