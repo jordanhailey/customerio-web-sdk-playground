@@ -129,6 +129,7 @@ export async function cioGetIdentifier() {
           );
         if(identifier == "") {
           identifier = cdpGetIdentifier().then(ids=>{
+            if (ids.identifier) cioIdentify({id:ids.identifier});
             resolve({identifier:ids.identifier ? ids.identifier : "",anonymousIdentifier});
           })
         }
