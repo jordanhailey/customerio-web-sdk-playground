@@ -61,27 +61,18 @@ export async function cdpGetIdentifier() {
                 resolve({userID:identifier,anonymousIdentifier})
               })
           } catch (err) {}
-        } else idFound = true;
+        } else {
+          idFound = true;
+          resolve({userID,anonymousIdentifier})
+        }
         if (!idFound) {
           resolve({userID,anonymousIdentifier})
         }
-      } else throw new Error("CDP is not loaded")
+      } else {
+        throw new Error("CDP is not loaded")
+      }
     } catch (err) {
       resolve({userID,anonymousIdentifier}) 
-    }
-  })
-}
-
-export async function cdpShowIdentifierElements(){
-  return new Promise(async (resolve,reject)=>{
-    try {
-      let {userID="",anonymousIdentifier=""} = await cdpGetIdentifier().then(ids=>ids);
-      if (userID) resolve(window.playground._helpers.propogateIdentifier({identifier:userID}));
-      else if (anonymousIdentifier) {
-        resolve(window.playground._helpers.propogateIdentifier({anonymousIdentifier}))
-      } else throw new Error("CDP not loaded")
-    } catch (err) {
-      reject(err)
     }
   })
 }

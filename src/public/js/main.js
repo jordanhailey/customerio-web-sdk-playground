@@ -41,8 +41,8 @@ _helpers.clearIdentifiers = function clearIdentifiers(){
   window.location.reload();
 }
 _helpers.getIdentifiers = async function getIdentifiers() {
-  let cio = await cioHelpers.cioGetIdentifier();
-  let cdp = await cdpHelpers.cdpGetIdentifier();
+  let cio = await cioHelpers.cioGetIdentifier().then(ids=>ids).catch(err=>console.error(err));
+  let cdp = await cdpHelpers.cdpGetIdentifier().then(ids=>ids).catch(err=>console.error(err));
   return {cio,cdp}
 }
 

@@ -167,18 +167,6 @@ function cioShowIds() {
   })
 }
 
-
-
-export async function cioShowIdentifierElements() {
-  return new Promise(async function fetchingIdentifier(resolve,reject){
-    cioShowIds()
-      .then(id=>{
-        resolve(window.playground._helpers.propogateIdentifier(id))
-      })
-      .catch(function idNotFound(err){reject(err)});
-  }) 
-}
-
 export async function cioIdentify({id,...args}){
   try {
     window._cio.identify({id,...args});

@@ -1,6 +1,3 @@
-import { cdpShowIdentifierElements } from "../cdp-helpers.js";
-import { cioShowIdentifierElements } from "../cio-helpers.js";
-
 // Nave buttons and icons
 const mobileNavBtn = document.querySelector('[aria-controls="mobile-menu"]');
 const mobileNavClosedIcon = document.getElementById('nav-icon-closed-state');
@@ -28,6 +25,7 @@ const desktopNavShowIdentifierBtn = document.querySelector('[aria-controls="show
 desktopNavShowIdentifierBtn.classList.remove("invisible");
 
 function successfullyFoundID(id) {
+  window.playground._helpers.propogateIdentifier(id);
   // Identifer found
   desktopNavShowIdentifierBtn.classList.remove("cursor-wait");
   desktopNavShowIdentifierBtn.setAttribute("disabled","");
