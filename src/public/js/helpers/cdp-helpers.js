@@ -82,8 +82,7 @@ export async function cdpGetIdentifier() {
 export async function cdpIdentify({userID,traits}){
   try {
     window.analytics.identify(userID, traits)
-      .then(call=>console.log(call))
-    console.log("CDP identify call sent",{userID,traits});
+      .then(call=>console.log("CDP identify call sent",call))
   } catch (err) {
     console.error(err)
   }
