@@ -1,6 +1,5 @@
 import { cioGetConfig, updateCioWebSDKConfig } from "../cio-helpers.js"; 
 import { cdpGetConfig, cdpSetConfig } from "../cdp-helpers.js"; 
-import { disconnectAll } from "../../main.js";
 
 const form = document.getElementById("set_cio_config");
 const siteIDInput = document.getElementById("siteID");
@@ -25,7 +24,7 @@ function removeSelection(el){el.removeAttribute("selected")}
 function setFormValues(disconnect=false) {
   if (disconnect === null) {
     console.warn("disconnecting website from your workspace");
-    disconnectAll()
+    window.playground._helpers.disconnectAll()
   }
   let { siteID, region, autoPageTracking } = cioGetConfig();
   siteIDInput.value = siteID.trim();

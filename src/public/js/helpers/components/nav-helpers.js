@@ -28,7 +28,6 @@ const desktopNavShowIdentifierBtn = document.querySelector('[aria-controls="show
 desktopNavShowIdentifierBtn.classList.remove("invisible");
 
 function successfullyFoundID(id) {
-  // console.log({id});
   // Identifer found
   desktopNavShowIdentifierBtn.classList.remove("cursor-wait");
   desktopNavShowIdentifierBtn.setAttribute("disabled","");
@@ -46,26 +45,48 @@ function successfullyFoundID(id) {
     }
 }
 
-function fetchIdentifier(){
+async function fetchIdentifier() {
   desktopNavShowIdentifierBtn.setAttribute("disabled","")
   desktopNavShowIdentifierBtn.classList.add("cursor-wait");
-    let timeout = setTimeout(()=>{
-      desktopNavShowIdentifierBtn.removeAttribute("disabled")
-    }, 1500)
-    cioShowIdentifierElements()
-      .then(function identifierFound(id){
-        successfullyFoundID(id);
-      })
-      .catch(err=>{{
-        cdpShowIdentifierElements().then(id=>{
-          clearTimeout(timeout);
-          successfullyFoundID(id);
-        }).catch(e=>{
-          console.error(e);
-        })
-      }})
+  let timeout = setTimeout(()=>{
+    desktopNavShowIdentifierBtn.removeAttribute("disabled")
+    desktopNavShowIdentifierBtn.classList.remove("cursor-wait");
+    }, 100);
+  let errors = [];
+  let cioIdentifier = await cioShowIdentifierElements()
+    .then(id => id)
+    .catch(err => {errors.push("Web SDK not loaded")});
+  let cdpIdentifier = await cdpShowIdentifierElements()
+    .then(id=>{
+      clearTimeout(timeout);
+      return id;
+    })
+    .catch(err => {errors.push("CDP not loaded")});
+
+  if (errors.length > 0) console.warn({errors})
+  if (cioIdentifier || cdpIdentifier) {
+    let
+      {identifier:cioID,anonymousIdentifier:cioAnon} = cioIdentifier || {identifier:"",anonymousIdentifier:""},
+      {identifier:cdpID,anonymousIdentifier:cdpAnon} = cdpIdentifier || {identifier:"",anonymousIdentifier:""};
+    if (cioID || cdpID) {
+      let identifier;
+      if (cioID) identifier = cioID;
+      else identifier = cdpID;
+      successfullyFoundID({identifier})
+    } else if (cioAnon || cdpAnon) {
+      let anonymousIdentifier;
+      if (cioAnon) anonymousIdentifier = cioAnon;
+      else anonymousIdentifier = cdpAnon
+      successfullyFoundID({anonymousIdentifier})
+    };
+  }
 }
-fetchIdentifier();
+
+window.addEventListener("load",()=>{
+  setTimeout(()=>{
+    fetchIdentifier();
+  },200)
+})
 
 desktopNavShowIdentifierBtn.addEventListener("click",fetchIdentifier)
 

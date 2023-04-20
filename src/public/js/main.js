@@ -75,7 +75,7 @@ _helpers.propogateIdentifier = function propogateIdentifier(id) {
  * 
  * @param {string} key The value of the item to remove from localStorage
  */
-function wipeOutLocalStorage(key=""){
+_helpers.wipeOutLocalStorage = function wipeOutLocalStorage(key=""){
   if (window.localStorage) {
     if (key) {
       console.warn("clearing entire localStorage value for", key, window.localStorage.getItem(key));
@@ -95,7 +95,7 @@ function wipeOutLocalStorage(key=""){
 _helpers.wipeOutCookies = function wipeOutCookies(key=""){
   if (document.cookie) {
     const currentCookies = Array.from(document.cookie.split(";")).map(function(c) {
-      let [name,value] = [c.slice(0,c.indexOf("=")),c.slice(c.indexOf("=")+1)]
+      let [name,value] = [c.slice(0,c.indexOf("=")).trim(),c.slice(c.indexOf("=")+1).trim()]
       return {name,value};
     });
     if (key) {
@@ -111,9 +111,11 @@ _helpers.wipeOutCookies = function wipeOutCookies(key=""){
 
 
 _helpers.disconnectAll = function disconnectAll(){
-  wipeOutLocalStorage();
-  wipeOutCookies();
+  _helpers.wipeOutLocalStorage();
+  _helpers.wipeOutCookies();
+  cioHelpers.cioResetIdentifier();
   cioHelpers.cioResetConfig();
+  cdpHelpers.cdpResetIdentifier();
   cdpHelpers.cdpResetConfig();
 }
 

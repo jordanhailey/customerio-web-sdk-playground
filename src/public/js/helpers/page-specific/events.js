@@ -1,10 +1,12 @@
+import { cdpPage, cdpTrack } from "../cdp-helpers.js";
 import { getCurrentEpochTimestampInSeconds } from "../index.js";
 
 let isCioInitialized = {timeout:undefined,attempts:0}
 function checkForCIO(){
   try {
     clearTimeout(isCioInitialized.timeout);
-    if (!window?._cio?.identify) {
+    if (window?._cio?.track || window?.analytics?.track) {
+    } else {
       isCioInitialized.attempts++
       if (isCioInitialized.attempts > 10) {
         clearTimeout(isCioInitialized.timeout)
@@ -13,8 +15,6 @@ function checkForCIO(){
       isCioInitialized.timeout = setTimeout(()=>{
         checkForCIO();
       },100)
-    } else {
-      // 
     }
   } catch (error) {
     Array.from(document.getElementsByClassName("no-snippet-warning")).forEach(el=>{
@@ -28,7 +28,7 @@ function checkForCIO(){
 
 const eventPayloads = {
   "event-1": {
-    name: "cio_web_sdk_test_event_1",
+    name: "playground_test_event_1",
     properties: {
       message: "Testing the Customer.io Web SDK",
       source: window.location.href,
@@ -53,27 +53,24 @@ function clickListenerToCIOWebSDKPageEvent(button) {
   button.addEventListener("click", function clickEventListener(e) {
     let loc = new URL(window.location.href);
     loc.hash = hash;
-    window._cio.page(loc.href);
+    if (window._cio) {
+      window._cio.page(loc.href);
+    }
     if (window.analytics) {
-      try {
-        window.analytics.page(loc.href)
-          .then(call=>console.log(call))
-      } catch (err) {
-        console.error(err)
-      }
+      cdpPage(loc.href);
     }
     window.location.replace(loc.href);
   });
 }
 
-function sendEventMetadata({ event: { name, properties }, timestamp }) {
+function sendEventMetadata({ event: { name, properties={} }, timestamp }) {
   properties.timestamp = timestamp;
   try {
-    window._cio.track(name, { ...properties });
-    console.log({ sentEvent: { name, properties } });
-    if (window.analytics) {
-      window.analytics.track(`cdp_${name}`, { ...properties })
-        .then(call=>{console.log("Analytics call sent",call)})
+    if (window._cio?.track) {
+      window._cio.track(`websdk_${name}`, { ...properties });
+    }
+    if (window.analytics?.track) {
+      cdpTrack({name:`cdp_${name}`,properties});
     }
   } catch (err) {
     console.error({

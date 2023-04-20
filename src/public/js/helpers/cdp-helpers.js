@@ -43,19 +43,30 @@ export function cdpResetConfig(){
   cdpSetConfig(CDP_DEFAULT_CONFIG)
 }
 
-export async function cdpShowIdentifierElements(){
-  return new Promise((resolve,reject)=>{
-    try {
+export function cdpGetIdentifier() {
+  try {
+    if (window?.analytics?._user) {
       let userID = window?.analytics?._user?.id(),
       anonymousIdentifier = (
         window?.analytics?._user?.anonymousId()
-        )
-      if (userID) resolve(window.playground._helpers.propogateIdentifier({identifier:userID}))
+        );
+        return {userID,anonymousIdentifier}
+      } else throw new Error("CDP is not loaded")
+  } catch (err) {
+   throw err 
+  }
+}
+
+export async function cdpShowIdentifierElements(){
+  return new Promise((resolve,reject)=>{
+    try {
+      let {userID="",anonymousIdentifier=""} = cdpGetIdentifier();
+      if (userID) resolve(window.playground._helpers.propogateIdentifier({identifier:userID}));
       else if (anonymousIdentifier) {
         resolve(window.playground._helpers.propogateIdentifier({anonymousIdentifier}))
-      }
+      } else throw new Error("CDP not loaded")
     } catch (err) {
-      throw err
+      reject(err)
     }
   })
 }
@@ -64,14 +75,23 @@ export async function cdpIdentify({userID,traits}){
   try {
     window.analytics.identify(userID, traits)
       .then(call=>console.log(call))
-    console.log("cdp identify call sent",{userID,traits});
+    console.log("CDP identify call sent",{userID,traits});
   } catch (err) {
     console.error(err)
   }
 }
 
-export async function cdpTrack(id,traits){
-
+export async function cdpPage(page) {
+  try {
+    window.analytics.page(page)
+      .then(call=>console.log("CDP page view sent",call))
+  } catch (err) {
+    console.error(err)
+  }
+}
+export async function cdpTrack({name,properties={}}){
+  window.analytics.track(name, { ...properties })
+        .then(call=>{console.log("CDP call sent",call)})
 }
 
 export function cdpResetIdentifier(){

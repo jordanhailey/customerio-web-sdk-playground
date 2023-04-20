@@ -1,3 +1,4 @@
+import { cdpGetIdentifier } from "./cdp-helpers.js";
 import { getCurrentEpochTimestampInSeconds } from "./index.js" 
 
 export const CIO_JS_SDK_LOCALSTORAGE_NAMESPACE = "CIO_WEB_SDK_CONFIG";
@@ -129,14 +130,20 @@ export async function cioGetIdentifier() {
         resolve({identifier,anonymousIdentifier});
       } else throw "_cio is not loaded"
     } catch (err) {
-      reject({identifier, anonymousIdentifier});
+      reject(err);
     }
   })
 }
 
 function retrieveIdentifier() {
+  try {
+    let {userID} = cdpGetIdentifier();
+    if (userID) window._cio.identify({id:userID})
+  } catch (error) {
+    
+  }
   return new Promise(async (resolve,reject)=>{
-    let cioID = await cioGetIdentifier().then(res=>res).catch(err=>{return undefined});
+    let cioID = await cioGetIdentifier().then(res=>res).catch(err=>{reject(err)});
     if (cioID?.identifier != undefined || cioID?.anonymousIdentifier  != undefined) {
       resolve(cioID)
     }

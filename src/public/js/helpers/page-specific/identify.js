@@ -30,7 +30,7 @@ function checkForCIOorCDP(){
       }
       isTrackerInitialized.timeout = setTimeout(()=>{
         checkForCIOorCDP();
-      },500)
+      },100)
     }
   } catch (error) {
     console.log(error);
