@@ -132,7 +132,7 @@ export async function cioGetIdentifier() {
             if (ids.identifier) cioIdentify({id:ids.identifier});
             resolve({identifier:ids.identifier ? ids.identifier : "",anonymousIdentifier});
           })
-        }
+        } else resolve({identifier,anonymousIdentifier});
       } else throw "_cio is not loaded"
     } catch (err) {
       resolve({identifier,anonymousIdentifier});

@@ -60,16 +60,12 @@ export async function cdpGetIdentifier() {
                   cdpIdentify({userID:identifier});
                   idFound = true;
                   }
-                resolve({identifier,anonymousIdentifier})
               })
           } catch (err) {}
         } else {
           idFound = true;
-          resolve({identifier,anonymousIdentifier})
         }
-        if (!idFound) {
-          resolve({identifier,anonymousIdentifier})
-        }
+        resolve({identifier,anonymousIdentifier});
       } else {
         throw new Error("CDP is not loaded")
       }
