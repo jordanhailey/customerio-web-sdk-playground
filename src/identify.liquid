@@ -8,8 +8,14 @@
 
 <section id="who-am-i" class="py-5 px-4 sm:px-6 my-8">
   <h2 class="my-5 text-3xl sm:text-4xl">
-    What is my identifier?
+    What's My Identifier?
   </h2>
+  <div id="form-warning" class="hidden bg-yellow-400 rounded-md -mx-2 px-2 sm:px-4">
+      <h3 class="py-2 font-semibold text-2xl sm:text-3xl">Heads Up</h3>
+      <p class="py-2">
+        It looks like your CIO snippet is not loaded, so certain features on this page may not function properly.
+      </p>
+    </div>
   {% include 'partials/current-identifier' %}
   <p class="my-4 max-w-4xl">
     If you're looking at an anonymous identifier, that means we're only capturing anonymous events and page view data. If in the future you are identified, then
@@ -24,12 +30,6 @@
   <div class="py-5">
     <h2 class="pb-5 text-3xl sm:text-4xl font-semibold leading-7 text-gray-900">Identify a Profile</h2>
     <p class="mt-1 text-sm leading-6 text-gray-600">This data will be used to send an <code class="text-red-500 font-mono text-sm">identify</code> call to your Customer.io workspace.</p>
-    <div id="form-warning" class="hidden bg-yellow-400 rounded-md -mx-2 px-2 sm:px-4">
-      <h3 class="py-2 font-semibold text-2xl sm:text-3xl">Heads Up</h3>
-      <p class="py-2">
-        It looks like your CIO snippet is not loaded, so these form fields are disabled.
-      </p>
-    </div>
   </div>
   <div class="py-5">
     <form id="identify-form" action="/identify/#identify-form">

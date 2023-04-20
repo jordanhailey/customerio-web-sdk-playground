@@ -1,5 +1,5 @@
-import { getCDPConfig } from "./helpers/cdp-helpers.js";
-getCDPConfig()
+import { cdpGetConfig } from "./helpers/cdp-helpers.js";
+cdpGetConfig()
   .then(function cdpConfigFound(CIO_CDP_CONFIG) {
     // Modifying the CDP snippet to prevent loading when token is not configured
     if (CIO_CDP_CONFIG.apiKey) {

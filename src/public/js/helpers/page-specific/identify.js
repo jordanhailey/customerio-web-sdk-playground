@@ -18,13 +18,13 @@ function checkForCIO(){
     clearTimeout(isCioInitialized.timeout);
     if (!window?._cio?.identify) {
       isCioInitialized.attempts++
-      if (isCioInitialized.attempts > 20) {
+      if (isCioInitialized.attempts > 10) {
         clearTimeout(isCioInitialized.timeout)
-        throw "Web SDK not loaded, cannot activate form"
+        throw "Web SDK not loaded"
       }
       isCioInitialized.timeout = setTimeout(()=>{
         checkForCIO();
-      },200)
+      },100)
     } else {
       inputs.forEach(el=>{
         el.removeAttribute("disabled")
@@ -82,7 +82,6 @@ export default function identify(){
         let userID = identifyCall.id
         let traits = {...identifyCall}
         delete(traits.id)
-        debugger
         try {
           window.analytics.identify(userID, traits)
             .then(call=>console.log(call))

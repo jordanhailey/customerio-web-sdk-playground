@@ -1,5 +1,31 @@
 import { getCurrentEpochTimestampInSeconds } from "../index.js";
 
+let isCioInitialized = {timeout:undefined,attempts:0}
+function checkForCIO(){
+  try {
+    clearTimeout(isCioInitialized.timeout);
+    if (!window?._cio?.identify) {
+      isCioInitialized.attempts++
+      if (isCioInitialized.attempts > 10) {
+        clearTimeout(isCioInitialized.timeout)
+        throw "Web SDK not loaded"
+      }
+      isCioInitialized.timeout = setTimeout(()=>{
+        checkForCIO();
+      },100)
+    } else {
+      // 
+    }
+  } catch (error) {
+    Array.from(document.getElementsByClassName("no-snippet-warning")).forEach(el=>{
+      el.classList.remove("hidden");
+    })
+    Array.from(document.querySelectorAll("main button")).forEach(el=>{
+      el.setAttribute("disabled","");
+    })
+  }
+}
+
 const eventPayloads = {
   "event-1": {
     name: "cio_web_sdk_test_event_1",
@@ -73,6 +99,7 @@ const sendPage3 = getElementById("send-page-3");
 const sendPage4 = getElementById("send-page-4");
 
 export default function events() {
+  checkForCIO();
   // Attach Event Listeners
   clickListenerToCIOWebSDKEvent(sendTest1)("event-1");
   clickListenerToCIOWebSDKPageEvent(sendPage1);
