@@ -43,7 +43,6 @@ export default function identify(){
   
   form.addEventListener("submit", function handleSubmit(submitEvent) {
     submitEvent.preventDefault();
-    // console.log({submitEvent});
     errorElement.innerText = "";
     warningElement.innerText = "";
     output.innerText = "";
@@ -91,7 +90,7 @@ export default function identify(){
       if (identifyCall.id) {
         setTimeout(() => {
           submitEvent.target.submit();
-        }, 5000); 
+        }, 10000); 
       }
     }
   });

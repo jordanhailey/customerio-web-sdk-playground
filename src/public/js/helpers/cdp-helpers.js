@@ -80,7 +80,6 @@ export async function cdpGetIdentifier() {
 }
 
 export async function cdpIdentify({userID,traits}){
-  console.log({userID,traits});
   try {
     window.analytics.identify(userID, traits)
       .then(call=>console.log(call))
