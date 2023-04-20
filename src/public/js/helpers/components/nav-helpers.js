@@ -60,12 +60,12 @@ async function fetchIdentifier() {
           {identifier:cioID,anonymousIdentifier:cioAnon} = cioIdentifier || {identifier:"",anonymousIdentifier:""},
           {identifier:cdpID,anonymousIdentifier:cdpAnon} = cdpIdentifier || {identifier:"",anonymousIdentifier:""};
         if (cioID || cdpID) {
-          let identifier;
+          let identifier = "";
           if (cioID) identifier = cioID;
           else identifier = cdpID;
           successfullyFoundID({identifier})
         } else if (cioAnon || cdpAnon) {
-          let anonymousIdentifier;
+          let anonymousIdentifier = "";
           if (cioAnon) anonymousIdentifier = cioAnon;
           else anonymousIdentifier = cdpAnon
           successfullyFoundID({anonymousIdentifier})

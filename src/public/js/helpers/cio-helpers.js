@@ -129,10 +129,9 @@ export async function cioGetIdentifier() {
           );
         if(identifier == "") {
           identifier = cdpGetIdentifier().then(ids=>{
-            return ids.identifier ? ids.identifier : ""
+            resolve({identifier:ids.identifier ? ids.identifier : "",anonymousIdentifier});
           })
         }
-        resolve({identifier,anonymousIdentifier});
       } else throw "_cio is not loaded"
     } catch (err) {
       resolve({identifier,anonymousIdentifier});
