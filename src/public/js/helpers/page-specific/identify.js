@@ -10,6 +10,7 @@ const CIO_CALL_NULL_ERROR = "TypeError: Cannot read properties of null (reading 
 const formWarning = document.getElementById("form-warning");
 const form = document.getElementById("identify-form");
 const inputs = document.querySelectorAll("input");
+const cancelBtn = document.getElementById("cancel");
 const warningElement = document.getElementById("identify-call-warning");
 const errorElement = document.getElementById("identify-call-error");
 const output = document.getElementById("identify-call-output");
@@ -38,11 +39,23 @@ function checkForCIOorCDP(){
   }
 }
 
+let submitTimeout;
+
+cancelBtn.addEventListener("click",()=>{
+  if (submitTimeout != undefined) {
+    clearTimeout(submitTimeout);
+    cancelBtn.innerText = "Cancel";
+  }
+  else {
+    Array.from(inputs).forEach(input=>{input.value= ""})
+  }
+})
 export default function identify(){
   checkForCIOorCDP()  
   
   form.addEventListener("submit", function handleSubmit(submitEvent) {
     submitEvent.preventDefault();
+    cancelBtn.innerText = "Stop Submission";
     errorElement.innerText = "";
     warningElement.innerText = "";
     output.innerText = "";
@@ -60,12 +73,14 @@ export default function identify(){
     }
     if (completelyEmpty) {
       errorElement.innerText = CIO_CALL_UNDEFINED_ERROR;
+      cancelBtn.innerText = "Cancel";
       return;
     }
     if (identifyProperties.id) {
       identifyCall.id = identifyProperties.id;
     } else {
       warningElement.innerText = CIO_NO_ID_WARNING;
+      cancelBtn.innerText = "Cancel";
     }
     if (identifyProperties.email) {
       identifyCall.email = identifyProperties.email;
@@ -74,21 +89,24 @@ export default function identify(){
       identifyCall[identifyProperties.customVariableName] =
         identifyProperties.customVariableValue || "";
     }
-    output.innerText = JSON.stringify(identifyCall, null, 2);
+    output.innerText = ""
     if (Object.keys(identifyCall).length === 0) {
       console.warn("no identify call sent");
+      cancelBtn.innerText = "Cancel";
     } else {
       if (window._cio) {
         cioIdentify(identifyCall);
+        output.innerText += `_cio.identify(${JSON.stringify(identifyCall, null, 2)})`
       }
       if (window.analytics) {
         let userID = identifyCall.id
         let traits = {...identifyCall}
         delete(traits.id)
         cdpIdentify({userID,traits})
+        output.innerText += `${output.innerText ? "\n\n" : ""}analytics.identify(\n${window.analytics._user.id() ? '"'+window.analytics._user.id()+'",\n' : "" }${JSON.stringify(traits, null, 2)})`
       }
       if (identifyCall.id) {
-        setTimeout(() => {
+        submitTimeout = setTimeout(() => {
           submitEvent.target.submit();
         }, 5000); 
       }
