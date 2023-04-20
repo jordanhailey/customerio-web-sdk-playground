@@ -31,3 +31,37 @@
     😊
   </p>
 </section>
+<section id="details" class="py-5 px-4 sm:px-6 my-8 bg-gray-100 rounded-md">
+  <h2 class="my-5 text-3xl sm:text-4xl">
+    FAQ
+  </h2>
+  <article class="rounded-lg bg-white p-2">
+    <h3 class="font-semibold">I want to send In-App Messages, which identifier should I be targeting?</h3>
+    <details class=" border-solid border-b-2 border-gray-800 my-4">
+      <summary class="container cursor-pointer">
+        In single-identifier 
+        (<code class="text-red-500 font-mono text-sm">id</code>
+        only) workspaces, use
+        <code class="text-red-500 font-mono text-sm">
+          {% raw %}
+            {{ customer.id }}{% endraw %}
+        </code>
+      </summary>
+      <p class="p-2">
+        If your workspace is a single-identifier workspace, your target audience should always be
+      <code class="text-red-500 font-mono text-sm">{% raw %}{{ customer.id }}{% endraw %}</code>. However, if you happen to be setting the <code class="text-red-500 font-mono text-sm">id</code> and the <code class="text-red-500 font-mono text-sm">email</code> to the same value, then you can get away with using <code class="text-red-500 font-mono text-sm">{% raw %}{{ customer.email }}{% endraw %}</code>, but we would never recommend that since <code class="text-red-500 font-mono text-sm">{% raw %}{{ customer.email }}{% endraw %}</code> would not be an identifier.
+      </p>
+    </details>
+    <details class=" border-solid border-b-2 border-gray-800 my-4">
+      <summary class="container cursor-pointer">
+        In multi-identifier workspaces (<code class="text-red-500 font-mono text-sm">id</code>
+        and
+        <code class="text-red-500 font-mono text-sm">email</code>), you will <em>still</em> likely be using <code class="text-red-500 font-mono text-sm">{% raw %}{{ customer.id }}{% endraw %}</code> as your target audience.
+        </code>
+      </summary>
+      <p class="p-2">
+        What really matters is how your developers are calling the <code class="text-red-500 font-mono text-sm">identify</code> function. Whichever way they are identifying the profile, the identifier value you use for in-app messages is only one value. So it will either be <code class="text-red-500 font-mono text-sm">{% raw %}{{customer.id}}{% endraw %}</code> or <code class="text-red-500 font-mono text-sm">{% raw %}{{ customer.email }}{% endraw %}</code>. It can never be both.
+      </p>
+    </details>
+  </article>
+</section>
