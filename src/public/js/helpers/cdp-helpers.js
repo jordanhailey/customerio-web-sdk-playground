@@ -47,12 +47,12 @@ export function cdpResetConfig(){
 export async function cdpGetIdentifier() {
   let idFound = false;
   return new Promise((resolve,reject)=>{
-    let userID, anonymousIdentifier
+    let identifier = "", anonymousIdentifier = ""
     try {
       if (window?.analytics?._user) {
         anonymousIdentifier = window?.analytics?._user?.anonymousId() || "";
-        userID = window?.analytics?._user?.id() || "";
-        if (!userID) {
+        identifier = window?.analytics?._user?.id() || "";
+        if (!identifier) {
           try {
             cioGetIdentifier()
               .then(({identifier})=>{
@@ -60,21 +60,21 @@ export async function cdpGetIdentifier() {
                   cdpIdentify({userID:identifier});
                   idFound = true;
                   }
-                resolve({userID:identifier,anonymousIdentifier})
+                resolve({identifier,anonymousIdentifier})
               })
           } catch (err) {}
         } else {
           idFound = true;
-          resolve({userID,anonymousIdentifier})
+          resolve({identifier,anonymousIdentifier})
         }
         if (!idFound) {
-          resolve({userID,anonymousIdentifier})
+          resolve({identifier,anonymousIdentifier})
         }
       } else {
         throw new Error("CDP is not loaded")
       }
     } catch (err) {
-      resolve({userID,anonymousIdentifier}) 
+      resolve({identifier,anonymousIdentifier}) 
     }
   })
 }

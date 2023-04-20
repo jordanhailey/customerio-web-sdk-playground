@@ -127,42 +127,15 @@ export async function cioGetIdentifier() {
         [identifier, anonymousIdentifier] = (
           [window._cio._findCustomer(), cioGetAnonymousID()]
           );
+        if(identifier == "") {
+          identifier = cdpGetIdentifier().then(ids=>{
+            return ids.identifier ? ids.identifier : ""
+          })
+        }
         resolve({identifier,anonymousIdentifier});
       } else throw "_cio is not loaded"
     } catch (err) {
       resolve({identifier,anonymousIdentifier});
-    }
-  })
-}
-
-function cioShowIds() {
-  try {
-    cdpGetIdentifier().then(({userID})=>{
-      window._cio.identify({id:userID})
-    });
-  } catch (err) {
-    
-  }
-  return new Promise(async (resolve,reject)=>{
-    let cioID = await cioGetIdentifier().then(res=>res).catch(err=>{reject(err)});
-    if (cioID?.identifier != undefined || cioID?.anonymousIdentifier  != undefined) {
-      resolve(cioID)
-    }
-    else {
-      let intervalAttempt = 0;
-      let cioLoadedInterval = setInterval(async function searchingForIdentifier() {
-        intervalAttempt++;
-        cioID = await cioGetIdentifier().then(res=>res).catch(err=>{return undefined});
-        if ( cioID?.identifier || cioID?.anonymousIdentifier ) {
-          clearInterval(cioLoadedInterval);
-          resolve(cioID);
-        }
-        // If not found, continue attempting every ~100ms for about 1 second
-        if (intervalAttempt > 10) {
-          clearInterval(cioLoadedInterval);
-          reject("no cio identifier found");
-        }
-      }, 100);
     }
   })
 }
