@@ -88,8 +88,12 @@
           <div class="hidden md:block">
             <div class="flex space-x-4">
               {{ desktop_nav_links }}
-              <button aria-controls="show-identifier" class="invisible rounded-full p-2 bg-purple-600 text-slate-100 font-semibold w-8 h-8">
-                <div id="question-icon" title="what is my identifier?">
+              <button
+                id="show-identifier"
+                aria-controls="show-identifier"
+                title="what is my identifier?"
+                class="invisible rounded-full p-2 bg-purple-600 text-slate-100 font-semibold w-8 h-8">
+                <div id="question-icon">
                   {% include 'partials/svg/question-icon.svg' %}
                 </div>
                 <div id="identifier-icon" class="hidden">

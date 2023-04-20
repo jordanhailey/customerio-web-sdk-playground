@@ -19,7 +19,7 @@ mobileNavBtn.addEventListener("click", (e) => {
 })
 
 
-const desktopNavShowIdentifierBtn = document.querySelector('[aria-controls="show-identifier"]')
+const desktopNavShowIdentifierBtn = document.getElementById("show-identifier")
 
 // Since this button relies on JS, only show it when the JS loads
 desktopNavShowIdentifierBtn.classList.remove("invisible");
@@ -29,18 +29,16 @@ function successfullyFoundID(id) {
   // Identifer found
   desktopNavShowIdentifierBtn.classList.remove("cursor-wait");
   desktopNavShowIdentifierBtn.setAttribute("disabled","");
-  desktopNavShowIdentifierBtn.classList.add("cursor-default");
   desktopNavShowIdentifierBtn.title = id.identifier ? "Your identifier current identifier is " + id.identifier : "Your identifier current anonymous identifier is " + id.anonymousIdentifier;
-    if (desktopNavShowIdentifier.classList.contains("hidden")) {
-      desktopNavShowIdentifier.classList.replace("hidden","flex");
-      desktopNavShowIdentifierQuestionIcon.classList.toggle("hidden")
-      desktopNavShowIdentifierIdentifierIcon.classList.toggle("hidden")
-    }
-    else {
-      desktopNavShowIdentifier.classList.replace("flex","hidden");
-      desktopNavShowIdentifierQuestionIcon.classList.toggle("hidden")
-      desktopNavShowIdentifierIdentifierIcon.classList.toggle("hidden")
-    }
+
+  if (desktopNavShowIdentifier.classList.contains("hidden")) {
+    desktopNavShowIdentifierQuestionIcon.classList.toggle("hidden")
+    desktopNavShowIdentifierIdentifierIcon.classList.toggle("hidden")
+  }
+  else {
+    desktopNavShowIdentifierQuestionIcon.classList.toggle("hidden")
+    desktopNavShowIdentifierIdentifierIcon.classList.toggle("hidden")
+  }
 }
 
 async function fetchIdentifier() {
@@ -84,7 +82,15 @@ window.addEventListener("load",()=>{
   },200)
 })
 
-desktopNavShowIdentifierBtn.addEventListener("click",fetchIdentifier)
+desktopNavShowIdentifierBtn.addEventListener("click",()=>{
+  fetchIdentifier()
+  if (desktopNavShowIdentifier.classList.contains("hidden")) {
+    desktopNavShowIdentifier.classList.replace("hidden","flex");
+  }
+  else {
+    desktopNavShowIdentifier.classList.replace("flex","hidden");
+  }
+})
 
 // Without JS, I want the nav to not be sticky, this will add the class sticky when the JS loads
 document.querySelectorAll("add-sticky").forEach(el=>{
