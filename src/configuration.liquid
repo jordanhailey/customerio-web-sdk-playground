@@ -7,23 +7,23 @@
 ---
 <section class="py-5 px-4 sm:px-6">
   <h2 class="pb-5 text-3xl sm:text-4xl font-semibold leading-7 text-gray-900">Configuration Options</h2>
-  <table class="hidden md:block">
+  <table>
     <thead>
       <tr>
-        <th class="rounded-tl-md rounded-bl-md text-left p-2 font-semibold w-1/6">Parameter</th>
-        <th class="text-left p-2 font-semibold">Default</th>
-        <th class="text-left p-2 font-semibold">Description</th>
+        <th class="text-left font-semibold pr-4">Parameter</th>
+        <th class="text-left font-semibold pr-4">Default</th>
+        <th class="text-left font-semibold">Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td class="rounded-tl-md rounded-bl-md text-left p-2">
+        <td class="text-left">
           <code class="text-red-500 font-mono text-sm">data-use-array-params</code>
         </td>
-        <td class="text-left p-2">
+        <td class="text-left">
           true
         </td>
-        <td class="rounded-tr-md rounded-br-md text-left p-2">When
+        <td class="text-left">When
           <code class="text-red-500 font-mono text-sm">true</code>, arrays in
           <code class="text-red-500 font-mono text-sm">identify</code>
           and
@@ -34,129 +34,28 @@
           <a class="font-bold text-teal-600" href="https://customer.io/docs/sdk/web/events/#event-array-data">handling arrays in track calls</a>
           for more information.</td>
       </tr>
-      <tr class="bg-gray-100">
-        <td class="rounded-tl-md rounded-bl-md text-left p-2">
+      <tr>
+        <td class="text-left">
           <code class="text-red-500 font-mono text-sm">data-auto-track-page</code>
         </td>
-        <td class="text-left p-2">true</td>
-        <td class="rounded-tr-md rounded-br-md text-left p-2">When
+        <td class="text-left">true</td>
+        <td class="text-left">When
           <code class="text-red-500 font-mono text-sm">true</code>, the SDK automatically sends
           <code class="text-red-500 font-mono text-sm">page</code>
           view events when it loads.</td>
       </tr>
       <tr>
-        <td class="rounded-tl-md rounded-bl-md text-left p-2">
+        <td class="text-left">
           <code class="text-red-500 font-mono text-sm">data-use-in-app</code>
         </td>
-        <td class="text-left p-2">false</td>
-        <td class="rounded-tr-md rounded-br-md text-left p-2">If you want to send in-app messages to your website, you must set this to
+        <td class="text-left">false</td>
+        <td class="text-left">If you want to send in-app messages to your website, you must set this to
           <code class="text-red-500 font-mono text-sm">true</code>
         </td>
       </tr>
     </tbody>
   </table>
-  <table class="block md:hidden">
-    <tbody>
-      <tr>
-        <td>
-          <table>
-            <thead>
-              <tr>
-                <th class="rounded-tl-md rounded-bl-md p-2 font-semibold text-left w-2/3">Parameter</th>
-                <th class="p-2 font-semibold text-left">Default</th>
-              </tr>
-            </thead>
-            <tr>
-              <td class="rounded-tl-md text-left rounded-bl-md p-2">
-                <code class="text-red-500 font-mono text-sm">data-use-array-params</code>
-              </td>
-              <td class="text-left p-2">
-                true
-              </td>
-            </tr>
-            <tr>
-              <th colspan="2" class="p-2 font-semibold text-left">Description</th>
-            </tr>
-            <tr>
-              <td colspan="2" class="rounded-tr-md rounded-br-md p-2">When
-                <code class="text-red-500 font-mono text-sm">true</code>, arrays in
-                <code class="text-red-500 font-mono text-sm">identify</code>
-                and
-                <code class="text-red-500 font-mono text-sm">track</code>
-                calls keep their shape as passed to Customer.io. Set to
-                <code class="text-red-500 font-mono text-sm">false</code>
-                to pass arrays as objects containing keys representing the index/order of items in the request. See
-                <a
-                  class="font-bold text-teal-600"
-                  href="https://customer.io/docs/sdk/web/events/#event-array-data"
-                  target="_blank">handling arrays in track calls</a>
-                for more information.</td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <table class="bg-gray-100 rounded-md my-4">
-            <thead>
-              <tr>
-                <th class="p-2 font-semibold text-left w-2/3">Parameter</th>
-                <th class="p-2 font-semibold text-left">Default</th>
-              </tr>
-            </thead>
-            <tr>
-              <td class="text-left p-2">
-                <code class="text-red-500 font-mono text-sm">data-auto-track-page</code>
-              </td>
-              <td class="text-left p-2">
-                true
-              </td>
-            </tr>
-            <tr>
-              <th colspan="2" class="p-2 font-semibold text-left">Description</th>
-            </tr>
-            <tr>
-              <td colspan="2" class="text-left p-2">When
-                <code class="text-red-500 font-mono text-sm">true</code>, the SDK automatically sends
-                <code class="text-red-500 font-mono text-sm">page</code>
-                view events when it loads.</td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <table>
-            <thead>
-              <tr>
-                <th class="p-2 font-semibold text-left w-2/3">Parameter</th>
-                <th class="p-2 font-semibold text-left">Default</th>
-              </tr>
-            </thead>
-            <tr>
-              <td class="text-left p-2">
-                <code class="text-red-500 font-mono text-sm">data-use-in-app</code>
-              </td>
-              <td class="text-left p-2">
-                false
-              </td>
-            </tr>
-            <tr>
-              <th colspan="2" class="p-2 font-semibold text-left">Description</th>
-            </tr>
-            <tr>
-              <td colspan="2" class="text-left p-2">If you want to send in-app messages to your website, you must set this to
-                <code class="text-red-500 font-mono text-sm">true</code>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 </section>
+
+
 {% include 'partials/configuration-form' %}
-<section class="py-5 px-4 sm:px-6">
-  <h2 class="show-snippet-text pb-5 text-3xl sm:text-4xl font-semibold leading-7 text-gray-900"></h2>
-  <pre class="show-snippet text-xs sm:text-sm overflow-scroll rounded-md bg-slate-900 text-slate-50 selection:text-slate-100 selection:bg-purple-900"></pre>
-</section>
