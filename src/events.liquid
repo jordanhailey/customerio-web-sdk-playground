@@ -11,7 +11,7 @@
     <a href="/configuration/" class="text-teal-600 hover:text-teal-900 font-bold">the configuration page</a>
     and have JavaScript enabled in your browser—and aren't using a content 
     blocker to prevent loading any of the scripts on this page—You're being tracked.</p>
-  <blockquote class="my-5 current-identifier bg-slate-100 rounded-md shadow w-fit"></blockquote>
+  {% include 'partials/current-identifier' %}
   <p class="my-4 max-w-4xl">Don't be alarmed... Unless you have scrolled down and clicked on any of the "Send Event" 
     buttons below, chances are that all we're tracking at this point are your page views across this domain. There are two event types that can be tracked with the JavaScript SDK, both of which can be sent to Customer.io at any time after the JavaScript snippet's initialization. The two event types are:
     <a href="#track-events">
@@ -25,7 +25,10 @@
   </p>
   <p class="my-4 max-w-4xl">
     If you have
-    <a class="text-teal-600 hover:text-teal-900 font-bold" href="https://customer.io/docs/anonymous-events/#turn-on-merging">enabled anonymous event merging</a>
+    <a
+      class="text-teal-600 hover:text-teal-900 font-bold"
+      href="https://customer.io/docs/anonymous-events/#turn-on-merging"
+      target="_blank">enabled anonymous event merging</a>
     in your workspace, then anonymous events are only "anonymous" until you associate the tracked
     <code class="text-red-500 font-mono text-sm">anonymous_id</code>
     with an identified profile in Customer.io.
@@ -40,36 +43,59 @@
     <code class="text-red-500 font-mono text-sm">track</code>
     events are typically all you will be responsible for sending. They are initiated in the following manner:
   </p>
-  <pre class="my-4 max-w-4xl text-sm">
-    window._cio.track(<code class="text-red-500 font-mono">YOUR_EVENT_NAME</code>, {<code class="text-red-500 font-mono">...YOUR_EVENT_PROPERTIES</code>})
+  <pre class="ml-0 my-4 max-w-4xl text-sm">
+  window._cio.track(<code class="text-red-500 font-mono">EVENT_NAME</code>, {
+    <code class="text-red-500 font-mono">...EVENT_PROPERTIES</code>
+    })
   </pre>
   <p class="my-4 max-w-4xl">
     In the code snippet above
-    <code class="text-red-500 font-mono text-sm">YOUR_EVENT_NAME</code>
+    <code class="text-red-500 font-mono text-sm">EVENT_NAME</code>
     should be a
-    <a href="https://customer.io/docs/getting-started-with-json/#simple" class="text-teal-600 hover:text-teal-900 font-bold">String value</a>. And
-    <code class="text-red-500 font-mono text-sm">YOUR_EVENT_PROPERTIES</code>
+    <a
+      href="https://customer.io/docs/getting-started-with-json/#simple"
+      class="text-teal-600 hover:text-teal-900 font-bold"
+      target="_blank">String value</a>. And
+    <code class="text-red-500 font-mono text-sm">EVENT_PROPERTIES</code>
     should be a valid JavaScript or
-    <a href="https://customer.io/docs/getting-started-with-json/#objects" class="text-teal-600 hover:text-teal-900 font-bold">JSON Object</a>. The
+    <a
+      href="https://customer.io/docs/getting-started-with-json/#objects"
+      class="text-teal-600 hover:text-teal-900 font-bold"
+      target="_blank">JSON Object</a>. The
     <code class="text-red-500 font-mono text-sm">...</code>
-    is a little built-in JavaScript feature known as a "<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax" class="text-teal-600 hover:text-teal-900 font-bold">spread operator</a>", in this case we're exemplifying that you can use it to copy the key-value pairs of your
-    <code class="text-red-500 font-mono text-sm">YOUR_EVENT_PROPERTIES</code>
+    is a little built-in JavaScript feature known as a "<a
+      href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax"
+      class="text-teal-600 hover:text-teal-900 font-bold"
+      target="_blank">spread operator</a>", in this case we're exemplifying that you can use it to copy the key-value pairs of your
+    <code class="text-red-500 font-mono text-sm">EVENT_PROPERTIES</code>
     Object into a new Object.
   </p>
   <p class="my-4 max-w-4xl">
-    Ready to send a track event? Go ahead and click the button below, and we'll send an event named "<code class="text-red-500 font-mono text-sm">cio_web_sdk_test_event_1</code>" with the following metadata:
+    Ready to send a track event? Go ahead and click the button below, and we'll send an event named "<code class="text-red-500 font-mono text-sm">websdk_playground_test_event_1</code>" (or "<code class="text-red-500 font-mono text-sm">cdp_playground_test_event_1</code>" if using the cdp) with the following metadata:
   </p>
-  <pre class="my-4 max-w-4xl text-sm">
-    {
-      timestamp: <code class="text-red-500">&lt;the_current_epoch_timestamp_in_seconds&gt;</code>,
-      message: "Testing the Customer.io Web SDK"
-      source: <code class="text-red-500">&lt;the_current_window_location&gt;</code>
-    }
+  <pre class="ml-0 my-4 max-w-4xl text-sm">
+  {
+    message: "CIO Web SDK Test",
+    source: <code class="text-red-500">&lt;current_url&gt;</code>,
+    timestamp: <code class="text-red-500">&lt;epoch_timestamp&gt;</code>
+  }
   </pre>
+  <div class="py-5">
+    <h2 class="pb-5 text-3xl sm:text-4xl font-semibold leading-7 text-gray-900">Track an event</h2>
+    <p class="mt-1 text-sm leading-6 text-gray-600">This data will be used to send a
+      <code class="text-red-500 font-mono text-sm">track</code>
+      call to your Customer.io workspace.</p>
+    <div class="no-snippet-warning hidden bg-yellow-400 rounded-md -mx-2 px-2 sm:px-4">
+      <h3 class="py-2 font-semibold text-2xl sm:text-3xl">Heads Up</h3>
+      <p class="py-2">
+        It looks like your CIO snippet is not loaded, so you cannot sent events yet.
+      </p>
+    </div>
+  </div>
   <button
     id="send-event-1"
     type="button"
-    class="inline-flex items-center gap-x-1.5 rounded-md bg-purple-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600">
+    class="inline-flex justify-center items-center gap-x-1.5 rounded-md bg-purple-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 disabled:bg-purple-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600">
     Send Event
     {% include 'partials/svg/paper-plane-icon.svg' %}
   </button>
@@ -78,5 +104,96 @@
   <h2 class="pb-5 text-3xl sm:text-4xl font-semibold leading-7 text-gray-900">
     <code class="text-red-500 font-mono text-2xl sm:text-3xl">page</code>
     Events</h2>
-  <p class="mb-4 max-w-4xl"></p>
+  <p class="mb-4 max-w-4xl">Click on the following buttons to
+    <em class="cursor-help" title="update the browser's location object">"navigate"</em>
+    to another page</p>
+  <div class="no-snippet-warning hidden bg-yellow-400 rounded-md -mx-2 px-2 sm:px-4">
+    <h3 class="py-2 font-semibold text-2xl sm:text-3xl">Heads Up</h3>
+    <p class="py-2">
+      It looks like your CIO snippet is not loaded, so you cannot sent page yet.
+    </p>
+  </div>
+  <div class="max-w-4xl">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 my-4">
+      <button
+        id="send-page-1"
+        type="button"
+        class="inline-flex justify-center items-center gap-x-1.5 rounded-md bg-purple-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 disabled:bg-purple-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
+        data-hash="#page-1">
+        #page-1
+        {% include 'partials/svg/paper-plane-icon.svg' %}
+      </button>
+      <button
+        id="send-page-2"
+        type="button"
+        class="inline-flex justify-center items-center gap-x-1.5 rounded-md bg-purple-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 disabled:bg-purple-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
+        data-hash="#page-2">
+        #page-2
+        {% include 'partials/svg/paper-plane-icon.svg' %}
+      </button>
+      <button
+        id="send-page-3"
+        type="button"
+        class="inline-flex justify-center items-center gap-x-1.5 rounded-md bg-purple-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 disabled:bg-purple-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
+        data-hash="#page-3">
+        #page-3
+        {% include 'partials/svg/paper-plane-icon.svg' %}
+      </button>
+      <button
+        id="send-page-4"
+        type="button"
+        class="inline-flex justify-center items-center gap-x-1.5 rounded-md bg-purple-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 disabled:bg-purple-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
+        data-hash="#page-4">
+        #page-4
+        {% include 'partials/svg/paper-plane-icon.svg' %}
+      </button>
+    </div>
+
+
+  </div>
+  <p class="mb-4 max-w-4xl">
+    To make a long story short, whenever your webpage reloads, as soon as the 
+    tracking snippet is successfully fetched (either from cache or from the CDN where the snippet is hosted) and initialized, a
+    <code class="text-red-500 font-mono text-sm">page</code>
+    call will be sent. That default "page view" activity will contain very basic information, 
+    including the browser's screen height, width, and the "<a
+      href="https://developer.mozilla.org/en-US/docs/Web/API/Document/referrer"
+      class="text-teal-600 hover:text-teal-900 font-bold"
+      target="_blank">referrer</a>". All of this data can be pulled up from your JavaScript Developer Tools. Open the JavaScript browser developer tools and try looking up the following values:
+    <ul class="list-disc ml-4">
+      <li>Find your screen width with
+        <code class="text-red-500 font-mono text-sm">window.innerWidth</code>
+      </li>
+      <li>Find your screen height with
+        <code class="text-red-500 font-mono text-sm">window.innerHeight</code>
+      </li>
+      <li>Find the referrer url with
+        <code class="text-red-500 font-mono text-sm">document.referrer</code>
+      </li>
+    </ul>
+  </p>
+  <p class="my-4 max-w-4xl">Is your application a "Single Page Application" (SPA)? If so, and if you want to track different view changes, you'll need to send a
+    <code class="text-red-500 font-mono text-sm">page</code>
+    call within your code to show the "location" changes.</p>
+</section>
+<section class="px-4 sm:px-6">
+  <h2 class="my-5 text-3xl sm:text-4xl font-semibold leading-7 text-gray-900">Resources</h2>
+  <ul class="max-w-4xl pl-4">
+    <li class="list-disc mb-2">
+      <a
+        href="https://www.customer.io/docs/sdk/web/events/#send-custom-events-with-track"
+        class="text-teal-600 hover:text-teal-900 font-bold"
+        target="_blank">Sending
+        <code class="text-red-500 font-mono text-sm">track</code>
+        events</a>
+    </li>
+    <li class="list-disc mb-2">
+      <a
+        href="https://www.customer.io/docs/sdk/web/events/#page-view-events"
+        class="text-teal-600 hover:text-teal-900 font-bold"
+        target="_blank">Sending
+        <code class="text-red-500 font-mono text-sm">page</code>
+        events</a>
+    </li>
+  </ul>
 </section>
