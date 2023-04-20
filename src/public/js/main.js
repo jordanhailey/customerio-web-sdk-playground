@@ -40,9 +40,10 @@ _helpers.clearIdentifiers = function clearIdentifiers(){
   cdpHelpers.cdpResetIdentifier();
   window.location.reload();
 }
-_helpers.getIdentifiers = function getIdentifiers(){
-  cioHelpers.cioGetIdentifier();
-  cdpHelpers.cdpGetIdentifier();
+_helpers.getIdentifiers = async function getIdentifiers() {
+  let cio = await cioHelpers.cioGetIdentifier();
+  let cdp = await cdpHelpers.cdpGetIdentifier();
+  return {cio,cdp}
 }
 
 _helpers.propogateIdentifier = function propogateIdentifier(id) {

@@ -1,3 +1,4 @@
+import { cioGetIdentifier } from "./cio-helpers.js";
 import { getCurrentEpochTimestampInSeconds } from "./index.js";
 export const CDP_LOCALSTORAGE_NAMESPACE = "CIO_CDP_CONFIG";
 const CDP_DEFAULT_CONFIG = {
@@ -43,24 +44,38 @@ export function cdpResetConfig(){
   cdpSetConfig(CDP_DEFAULT_CONFIG)
 }
 
-export function cdpGetIdentifier() {
-  try {
-    if (window?.analytics?._user) {
-      let userID = window?.analytics?._user?.id(),
-      anonymousIdentifier = (
-        window?.analytics?._user?.anonymousId()
-        );
-        return {userID,anonymousIdentifier}
+export async function cdpGetIdentifier() {
+  let idFound = false;
+  return new Promise((resolve,reject)=>{
+    let userID, anonymousIdentifier
+    try {
+      if (window?.analytics?._user) {
+        anonymousIdentifier = window?.analytics?._user?.anonymousId() || "";
+        userID = window?.analytics?._user?.id() || "";
+        if (!userID) {
+          try {
+            cioGetIdentifier()
+              .then(({identifier})=>{
+                cdpIdentify({userID:identifier});
+                idFound = true;
+                resolve({userID:identifier,anonymousIdentifier})
+              })
+          } catch (err) {}
+        } else idFound = true;
+        if (!idFound) {
+          resolve({userID,anonymousIdentifier})
+        }
       } else throw new Error("CDP is not loaded")
-  } catch (err) {
-   throw err 
-  }
+    } catch (err) {
+      resolve({userID,anonymousIdentifier}) 
+    }
+  })
 }
 
 export async function cdpShowIdentifierElements(){
-  return new Promise((resolve,reject)=>{
+  return new Promise(async (resolve,reject)=>{
     try {
-      let {userID="",anonymousIdentifier=""} = cdpGetIdentifier();
+      let {userID="",anonymousIdentifier=""} = await cdpGetIdentifier().then(ids=>ids);
       if (userID) resolve(window.playground._helpers.propogateIdentifier({identifier:userID}));
       else if (anonymousIdentifier) {
         resolve(window.playground._helpers.propogateIdentifier({anonymousIdentifier}))
@@ -72,6 +87,7 @@ export async function cdpShowIdentifierElements(){
 }
 
 export async function cdpIdentify({userID,traits}){
+  console.log({userID,traits});
   try {
     window.analytics.identify(userID, traits)
       .then(call=>console.log(call))

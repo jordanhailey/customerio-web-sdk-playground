@@ -135,11 +135,12 @@ export async function cioGetIdentifier() {
   })
 }
 
-function retrieveIdentifier() {
+function cioShowIds() {
   try {
-    let {userID} = cdpGetIdentifier();
-    if (userID) window._cio.identify({id:userID})
-  } catch (error) {
+    cdpGetIdentifier().then(({userID})=>{
+      window._cio.identify({id:userID})
+    });
+  } catch (err) {
     
   }
   return new Promise(async (resolve,reject)=>{
@@ -170,7 +171,7 @@ function retrieveIdentifier() {
 
 export async function cioShowIdentifierElements() {
   return new Promise(async function fetchingIdentifier(resolve,reject){
-    retrieveIdentifier()
+    cioShowIds()
       .then(id=>{
         resolve(window.playground._helpers.propogateIdentifier(id))
       })
