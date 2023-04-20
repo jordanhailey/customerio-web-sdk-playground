@@ -56,8 +56,10 @@ export async function cdpGetIdentifier() {
           try {
             cioGetIdentifier()
               .then(({identifier})=>{
-                cdpIdentify({userID:identifier});
-                idFound = true;
+                if (identifier != "") {
+                  cdpIdentify({userID:identifier});
+                  idFound = true;
+                  }
                 resolve({userID:identifier,anonymousIdentifier})
               })
           } catch (err) {}
