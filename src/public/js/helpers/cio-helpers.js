@@ -121,7 +121,7 @@ export function cioResetIdentifier() {
 }
 export async function cioGetIdentifier() {
   return new Promise((resolve,reject)=>{
-    let identifier, anonymousIdentifier;
+    let identifier="", anonymousIdentifier="";
     try {
       if (window._cio) {
         [identifier, anonymousIdentifier] = (
@@ -130,7 +130,7 @@ export async function cioGetIdentifier() {
         resolve({identifier,anonymousIdentifier});
       } else throw "_cio is not loaded"
     } catch (err) {
-      reject(err);
+      resolve({identifier,anonymousIdentifier});
     }
   })
 }
@@ -175,3 +175,23 @@ export async function cioIdentify({id,...args}){
     console.error(err)
   }
 }
+
+export async function cioTrack({eventName,...args}){
+  try {
+    window._cio.track(eventName,{...args});
+    console.log("_cio track call sent",{eventName},{...args});
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+export async function cioPage({location,...args}){
+  try {
+    window._cio.page(location,{...args});
+    console.log("_cio page call sent",{location},{...args});
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+

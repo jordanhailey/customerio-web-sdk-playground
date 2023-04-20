@@ -1,4 +1,5 @@
 import { cdpPage, cdpTrack } from "../cdp-helpers.js";
+import { cioPage, cioTrack } from "../cio-helpers.js";
 import { getCurrentEpochTimestampInSeconds } from "../index.js";
 
 let isCioInitialized = {timeout:undefined,attempts:0}
@@ -36,9 +37,11 @@ const eventPayloads = {
   },
 };
 
+let eventClickCount = 0;
 function clickListenerToCIOWebSDKEvent(button) {
   return function (eventName) {
     button.addEventListener("click", function clickEventListener(e) {
+      eventClickCount++
       const timestamp = getCurrentEpochTimestampInSeconds();
       return sendEventMetadata({
         event: getEventMetadata(eventName),
@@ -47,16 +50,17 @@ function clickListenerToCIOWebSDKEvent(button) {
     });
   };
 }
-
+let pageViewClickCount = 0;
 function clickListenerToCIOWebSDKPageEvent(button) {
   let hash = button.dataset.hash || "#";
   button.addEventListener("click", function clickEventListener(e) {
     let loc = new URL(window.location.href);
     loc.hash = hash;
-    if (window._cio) {
-      window._cio.page(loc.href);
+    pageViewClickCount++
+    if (window._cio?.page) {
+      cioPage({location:loc.href,properties:{pageViewClickCount}})
     }
-    if (window.analytics) {
+    if (window.analytics?.page) {
       cdpPage(loc.href);
     }
     window.location.replace(loc.href);
@@ -65,9 +69,10 @@ function clickListenerToCIOWebSDKPageEvent(button) {
 
 function sendEventMetadata({ event: { name, properties={} }, timestamp }) {
   properties.timestamp = timestamp;
+  properties.eventClickCount = eventClickCount;
   try {
     if (window._cio?.track) {
-      window._cio.track(`websdk_${name}`, { ...properties });
+      cioTrack({eventName:`websdk_${name}`,...properties})
     }
     if (window.analytics?.track) {
       cdpTrack({name:`cdp_${name}`,properties});
